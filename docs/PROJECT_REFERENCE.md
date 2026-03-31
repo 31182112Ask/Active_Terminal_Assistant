@@ -5,51 +5,62 @@
 - Dialogue model: `qwen3:14b`
 - Decision model: `qwen3:1.7b`
 
+## Main Product Shape
+
+- 默认入口是 GUI
+- CLI 保留为开发和调试兜底入口
+- `agere` 负责事件式工作流
+- `ProactiveAgent` 负责主动唤醒节奏
+
 ## Core Flow
 
-1. 用户输入到达
-2. `agere` job/handler 进入 `user_input_received`
-3. 对话模型生成普通回复
-4. 状态转入 `idle_waiting`
-5. `ProactiveAgent` 的 `WakeUpScheduler` 计算下次唤醒时间
+1. 用户在 GUI 或 CLI 中输入消息
+2. `WorkflowOrchestrator` 把事件放进 `agere` job/handler
+3. 对话模型生成正常回复
+4. 系统转入 `idle_waiting`
+5. `ProactiveSchedulerBridge` 使用 `WakeUpScheduler` 计算下次唤醒
 6. 唤醒后进入 `speak_wait_decision`
-7. 规则门控 + 决策模型判断 `WAIT` / `SPEAK`
-8. 若 `SPEAK`，对话模型生成主动补充内容
-9. 用户若在此时发新消息，会取消主动输出并优先处理新输入
+7. 判定模型输出极简 JSON
+8. 若结果是 `SPEAK`，主模型生成一个更短、更轻的主动补充
+9. 用户若在此期间输入新消息，主动输出会被取消
 
-## 关键模块
+## Short vs Long Proactive Windows
+
+系统现在有两层主动节奏：
+
+- `short`
+  刚回答完后的一小段自然延续窗口，更适合补一句
+- `long`
+  更保守的后续主动窗口，更适合稍晚一点再轻补一条
+
+相关状态会出现在：
+
+- GUI 状态区
+- GUI developer panel
+- `SessionSnapshot`
+
+## Key Modules
 
 - [`app/workflow/orchestrator.py`](/c:/Users/33835/Erika_project_v3/app/workflow/orchestrator.py)
-  agere 工作流、事件调度、生成取消、中断处理
+  核心引擎，供 GUI 与 CLI 复用
+- [`app/gui/main.py`](/c:/Users/33835/Erika_project_v3/app/gui/main.py)
+  Tk GUI 主界面
+- [`app/gui/viewmodel.py`](/c:/Users/33835/Erika_project_v3/app/gui/viewmodel.py)
+  GUI 展示层视图模型
 - [`app/services/proactive.py`](/c:/Users/33835/Erika_project_v3/app/services/proactive.py)
-  ProactiveAgent `WakeUpScheduler` 桥接与睡眠策略
+  ProactiveAgent 调度桥接
 - [`app/services/rules.py`](/c:/Users/33835/Erika_project_v3/app/services/rules.py)
-  冷却、重复抑制、用户 disengagement、连续主动轮次控制
+  必要的最小护栏
 - [`app/adapters/dialogue.py`](/c:/Users/33835/Erika_project_v3/app/adapters/dialogue.py)
-  对话模型流式生成
+  主模型流式生成
 - [`app/adapters/decision.py`](/c:/Users/33835/Erika_project_v3/app/adapters/decision.py)
-  决策模型 JSON 解析
-- [`app/cli/rendering.py`](/c:/Users/33835/Erika_project_v3/app/cli/rendering.py)
-  Rich CLI 面板渲染
+  判定模型 JSON 解析
 
-## 配置优先级
+## Startup
 
-1. 代码默认值
-2. `agent.toml`
-3. 环境变量覆盖
-
-## 日志
-
-日志输出到：
-
-- 控制台
-- `logs/session-<session_id>.log`
-
-## 一键启动链路
-
-[`run_all.bat`](/c:/Users/33835/Erika_project_v3/run_all.bat) 会依次调用：
+[`run_all.bat`](/c:/Users/33835/Erika_project_v3/run_all.bat) 会依次运行：
 
 1. `pip install -e .[dev]`
 2. [`scripts/prepare_runtime.py`](/c:/Users/33835/Erika_project_v3/scripts/prepare_runtime.py)
 3. [`scripts/check_ollama.py`](/c:/Users/33835/Erika_project_v3/scripts/check_ollama.py)
-4. [`scripts/run_cli.py`](/c:/Users/33835/Erika_project_v3/scripts/run_cli.py)
+4. [`scripts/run_gui.py`](/c:/Users/33835/Erika_project_v3/scripts/run_gui.py)

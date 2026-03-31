@@ -1,83 +1,96 @@
-# Local Proactive CLI Agent
+# Active Terminal Assistant
 
-本项目是一个本地运行的主动式终端助手，满足 `AGENTS.md` 中的核心要求：
+这是一个本地运行的主动式对话助手，当前版本已经从 CLI 原型演进到 GUI 主界面。
 
-- 全本地推理，基于 Ollama
+核心特性：
+
+- 全本地运行，基于 Ollama
 - 双模型架构
 - 对话模型：`qwen3:14b`
-- 决策模型：`qwen3:1.7b`
-- `agere` 负责显式工作流编排
+- 判定模型：`qwen3:1.7b`
+- `agere` 负责显式工作流调度
 - `ProactiveAgent` 负责主动唤醒与睡眠节奏
-- 自定义 CLI 面板，支持多轮对话、状态观测、slash commands、主动补充发言
+- 默认 GUI 聊天界面，CLI 作为开发兜底保留
+- 支持多轮对话、主动补充发言、用户打断、开发者面板
 
-## 已实现能力
+## 当前重点
 
-- 多轮文本对话
-- 双模型分工
-- 主动决策与主动补充回复
-- 保守规则门控
-- 用户打断主动输出
-- 可观测 CLI 面板
-- slash commands
-- 一键启动脚本
-- 单元测试、集成测试、脚本化 e2e 测试
+这版项目的重点不再是“可观测 CLI”，而是：
+
+- 更自然的 GUI 聊天体验
+- 更短、更口语化的默认回复
+- 短延续窗口和长主动窗口两层节奏
+- 更轻量的判定模型职责
+- 保留必要护栏，但减少外部规则对交流内容的主导
 
 ## 目录结构
 
 ```text
 app/
-  cli/          # Rich CLI、输入控制、slash commands
-  workflow/     # agere 工作流编排
-  adapters/     # Ollama 对话/决策适配器
-  prompts/      # 提示词模板
-  state/        # 会话状态与快照
-  services/     # 规则门控、上下文压缩、ProactiveAgent 桥接
-  config/       # TOML + 环境变量配置
+  adapters/     # Ollama 对话/判定适配器
+  cli/          # CLI 调试入口和 slash command
+  config/       # 配置加载
+  gui/          # Tk GUI 主界面与显示模型
+  prompts/      # 提示词
+  services/     # 主动调度、规则护栏、上下文压缩
+  state/        # 会话状态
   utils/        # 日志与文本工具
+  workflow/     # agere 工作流编排
 tests/
   unit/
   integration/
   e2e/
 scripts/
+  run_gui.py
   run_cli.py
-  check_ollama.py
   prepare_runtime.py
-run_all.bat
-agent.toml
+  check_ollama.py
 ```
 
-## 环境要求
-
-- Windows + PowerShell
-- Python 3.12+
-- 本地安装 Ollama，并可执行 `ollama`
-
 ## 一键启动
-
-项目根目录下直接运行：
 
 ```powershell
 cmd /c run_all.bat
 ```
 
-`run_all.bat` 会做这些事：
+这会自动：
 
-1. 创建虚拟环境（如缺失）
-2. 安装项目依赖
-3. 尝试拉起 `ollama serve`
-4. 自动拉取缺失模型
-5. 校验模型是否可用
-6. 启动 CLI
+1. 创建虚拟环境
+2. 安装依赖
+3. 准备 Ollama 运行时
+4. 检查本地模型
+5. 启动 GUI
 
-## 手动启动
+## 手动启动 GUI
 
 ```powershell
 .venv\Scripts\python.exe -m pip install -e .[dev]
 .venv\Scripts\python.exe scripts\prepare_runtime.py
+.venv\Scripts\python.exe scripts\run_gui.py
+```
+
+## CLI 调试入口
+
+如果你仍然想用旧的终端调试入口：
+
+```powershell
 .venv\Scripts\python.exe scripts\run_cli.py
 ```
 
-## 常用命令
+## GUI 功能
+
+- 聊天主区
+- 多行输入框
+- Send / Cancel Output / Clear Chat
+- Proactive mode 开关
+- Debug mode 开关
+- Developer panel 折叠区
+- Poke / Speak Now / Reset
+- Transcript 导出
+
+## Slash Commands
+
+GUI 输入框和 CLI 都支持：
 
 - `/help`
 - `/quit`
@@ -96,25 +109,17 @@ cmd /c run_all.bat
 
 ## 配置
 
-默认配置文件是根目录的 [`agent.toml`](/c:/Users/33835/Erika_project_v3/agent.toml)。
+默认配置文件是 [`agent.toml`](/c:/Users/33835/Erika_project_v3/agent.toml)。
 
-可以配置：
+现在主要可调项包括：
 
-- Ollama 地址
-- 对话/决策模型
+- 模型名称与 Ollama 地址
+- GUI 窗口尺寸与轮询间隔
 - 主动模式开关
+- 短延续窗口 / 长主动窗口
 - 冷却时间
-- 最大连续主动轮次
-- CLI 刷新频率
+- 重复抑制阈值
 - 日志级别
-
-也支持部分环境变量覆盖，例如：
-
-- `LPA_DIALOGUE_MODEL`
-- `LPA_DECISION_MODEL`
-- `LPA_OLLAMA_BASE_URL`
-- `LPA_PROACTIVE_ENABLED`
-- `LPA_DEBUG`
 
 ## 测试
 
@@ -122,29 +127,30 @@ cmd /c run_all.bat
 .venv\Scripts\python.exe -m pytest
 ```
 
-当前测试覆盖：
+当前自动化覆盖：
 
-- 决策输出解析
-- 规则门控与重复抑制
+- 判定 JSON 解析
+- 规则护栏
+- GUI 状态显示模型
 - slash command 处理
-- 普通回复路径
+- 正常回复路径
 - 主动补充路径
 - 用户打断主动输出
 - 错误恢复
 
-## 运行前检查
+## Ollama 依赖
 
-单独检查 Ollama 与模型：
-
-```powershell
-.venv\Scripts\python.exe scripts\check_ollama.py
-```
-
-如果缺失模型，可手动拉取：
+本地至少需要：
 
 ```powershell
 ollama pull qwen3:14b
 ollama pull qwen3:1.7b
+```
+
+单独检查运行时：
+
+```powershell
+.venv\Scripts\python.exe scripts\check_ollama.py
 ```
 
 ## 文档

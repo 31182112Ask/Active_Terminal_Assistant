@@ -98,16 +98,24 @@ class ProactiveSchedulerBridge:
     async def _calculate_sleep_time(self, config: dict[str, Any], context: dict[str, Any]) -> tuple[int, str]:
         min_sleep = int(config["min_sleep_time"])
         max_sleep = int(config["max_sleep_time"])
+        short_min = int(self._config.proactive.short_window_min_sleep_seconds)
+        short_max = int(self._config.proactive.short_window_max_sleep_seconds)
+        long_min = int(self._config.proactive.long_window_min_sleep_seconds)
+        long_max = int(self._config.proactive.long_window_max_sleep_seconds)
         if not context.get("has_recent_user_turn"):
-            return max_sleep, "no recent user activity, using max sleep"
+            return max_sleep, "long:no recent user activity, using max sleep"
         if context.get("awaiting_user_answer"):
-            return min(max_sleep, max(min_sleep, self._config.proactive.question_cooldown_seconds)), "assistant is waiting for user answer"
+            value = min(max_sleep, max(long_min, self._config.proactive.question_cooldown_seconds))
+            return value, "long:assistant is waiting for user answer"
         if context.get("consecutive_proactive_turns", 0) > 0:
-            value = min(max_sleep, max(min_sleep, min_sleep + 20 * context["consecutive_proactive_turns"]))
-            return value, "backing off after proactive turn"
-        if context.get("last_assistant_seconds") is not None and context["last_assistant_seconds"] < 60:
-            return max(min_sleep, 20), "recent assistant activity keeps sleep short"
-        return min(max_sleep, max(min_sleep, 45)), "default proactive sleep window"
+            value = min(max_sleep, max(long_min, long_min + 18 * context["consecutive_proactive_turns"]))
+            return value, "long:backing off after a proactive turn"
+        if context.get("last_assistant_seconds") is not None and context["last_assistant_seconds"] < self._config.proactive.recent_reply_threshold_seconds:
+            value = max(short_min, min(short_max, 12))
+            return value, "short:light continuation window after recent reply"
+        value = min(max_sleep, max(long_min, min(long_max, 50)))
+        value = max(value, min_sleep)
+        return value, "long:default proactive window"
 
     def _build_scheduler_context(self) -> dict[str, Any]:
         snapshot = self._context_provider()

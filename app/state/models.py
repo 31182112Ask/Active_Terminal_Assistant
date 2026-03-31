@@ -44,6 +44,8 @@ class DecisionRecord:
     reason: str
     confidence: float
     source: Literal["rule", "model", "combined"] = "model"
+    intent: str | None = None
+    window: Literal["short", "long"] | None = None
     suggested_topic: str | None = None
     urgency: str | None = None
     timestamp: datetime = field(default_factory=datetime.now)
@@ -74,10 +76,11 @@ class SessionSnapshot:
     consecutive_proactive_turns: int
     awaiting_user_answer: bool
     pending_proactive_cancelled: bool
+    recently_interrupted: bool
     next_wake_up_at: datetime | None
     last_sleep_reason: str | None
+    current_proactive_window: Literal["short", "long"] | None
     last_rule_block: str | None
     last_error: str | None
     dialogue_model: str
     decision_model: str
-

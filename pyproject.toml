@@ -23,7 +23,7 @@ dev = [
 ]
 
 [project.scripts]
-local-proactive-agent = "app.cli.main:main"
+local-proactive-agent = "app.gui.main:main"
 
 [tool.setuptools]
 include-package-data = true

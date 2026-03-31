@@ -18,6 +18,8 @@ class ParsedDecision:
     decision: str
     reason: str
     confidence: float
+    intent: str | None = None
+    window: str | None = None
     urgency: str | None = None
     suggested_topic: str | None = None
 
@@ -72,6 +74,8 @@ class DecisionModelAdapter:
             decision=decision,
             reason=str(data.get("reason", "")).strip() or "model returned no reason",
             confidence=max(0.0, min(1.0, confidence)),
+            intent=str(data.get("intent")).strip() if data.get("intent") else None,
+            window=str(data.get("window")).strip() if data.get("window") else None,
             urgency=str(data.get("urgency")).strip() if data.get("urgency") else None,
             suggested_topic=str(data.get("suggested_topic")).strip() if data.get("suggested_topic") else None,
         )

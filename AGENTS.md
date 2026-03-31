@@ -1,695 +1,751 @@
 # AGENTS.md
 
-## Project Name
+## 项目名称
 
-Local Proactive CLI Agent
-
-## Project Goal
-
-Build a fully local proactive conversational agent that runs on Ollama, uses `qwen3:14b` as the main dialogue model, uses `qwen3:1.7b` as the decision model for proactive re-speaking, integrates `leomariga/ProactiveAgent` as the proactive scheduling and decision backbone, and uses **agere** to manage the workflow as an explicit agent pipeline.
-
-The system must provide a **standalone CLI conversation interface** designed specifically for this project, not a minimal REPL. The CLI should display as much useful information as is reasonable without becoming noisy, and should support a smooth long-running interactive session.
-
-This project is not a generic chat shell. It is a structured local agent system whose key feature is:
-
-- the assistant can answer normally to user input,
-- then, after already having answered,
-- it can periodically decide whether it should speak again **without new user input**,
-- and do so under explicit workflow control rather than ad hoc polling code.
+Active Terminal Assistant → GUI 版本演进
 
 ---
 
-## Core Product Definition
+## 项目总目标
 
-The product is a local terminal-based proactive assistant with these properties:
+将当前项目从“可观测的本地主动式 CLI 原型”演进为“更接近日常人类交流方式的本地 GUI 对话助手”。
 
-1. **Fully local inference** through Ollama.
-2. **Two-model architecture**:
-   - Dialogue model: `qwen3:14b`
-   - Decision model: `qwen3:1.7b`
-3. **Proactive behavior** built around `leomariga/ProactiveAgent`.
-4. **Workflow orchestration** built with **agere**, rather than scattered callback logic.
-5. **Standalone CLI UI** with clear panels / sections / status regions.
-6. **Text-first interaction** as the primary target.
-7. Optional support for voice input/output may be designed as an extension point, but text I/O is the required baseline.
+系统必须继续满足以下核心约束：
 
----
-
-## Required Behavioral Scope
-
-### Required
-
-The assistant must support the following baseline behavior:
-
-- normal multi-turn user-assistant dialogue,
-- streaming or near-streaming assistant output in CLI,
-- memory of recent turns within the current session,
-- periodic wake-up checks after the assistant has already spoken,
-- proactive decision-making when the user is silent,
-- explicit separation between:
-  - **decision to speak**,
-  - **generation of what to say**,
-  - **rendering to the CLI**,
-- interruption-safe behavior when the user sends a new message while the system is idle or preparing a proactive response.
-
-### Not required in v1
-
-The following are not mandatory unless implementation is straightforward:
-
-- long-term vector memory,
-- GUI,
-- remote deployment,
-- browser control,
-- speech synthesis,
-- ASR,
-- mobile packaging,
-- multimodal input.
-
-These may be left as future extension points, but the architecture should not block them.
+- **全本地运行**
+- **基于 Ollama**
+- **双模型架构**
+  - 对话模型：`qwen3:14b`
+  - 判定模型：`qwen3:1.7b`
+- **使用 `leomariga/ProactiveAgent` 作为主动唤醒/睡眠骨架**
+- **使用 `agere` 进行显式工作流管理**
+- **前端从 CLI 迁移为 GUI**
+- **尽量减少对“外部规则系统”的依赖**
+- **尽量通过提示词与模块设计，让模型自然理解如何说话、何时补充、如何使用提供的能力**
+- **最终目标不是“高控制感”，而是“更自然、更像人、更可长期相处”**
 
 ---
 
-## Primary User Experience
+## 核心设计哲学
 
-A user starts the CLI, sees system state, model state, and conversation regions, then chats normally.
+### 一，少约束，但不是无约束
 
-After the assistant replies, the system enters a managed idle phase. During idle:
+本项目不追求靠大量外部规则精细操纵模型的说话节奏，也不追求把所有行为都变成硬编码状态机。
 
-- a periodic scheduler wakes up,
-- the decision model evaluates whether the assistant should speak again,
-- if the answer is no, the system returns to idle,
-- if the answer is yes, the main model generates a proactive follow-up,
-- the proactive message is clearly labeled in the CLI.
+但考虑到当前模型组合是：
 
-The user must always be able to type a new message and reclaim control of the session.
+- 主模型：`qwen3:14b`
+- 判定模型：`qwen3:1.7b`
 
-The assistant's proactive behavior must feel deliberate rather than random spam.
+它们并不适合承担过于复杂、过于抽象、过于精细的全内生社交判断。
 
----
+因此，本项目采用以下折中原则：
 
-## Architectural Requirements
+- **外部系统只保留最薄的一层“护栏”**
+- **把更多“如何自然说话”的任务交给提示词与主模型**
+- **把判定模型的职责压缩到足够简单、足够稳定的范围**
+- **允许模型分多次说完一件事，而不是每次都输出完整论文式回答**
 
-### High-Level Components
+### 二，主动发言不是“定时骚扰”
 
-Implement the project with the following components.
+主动发言必须像人，而不是像定时提醒器。
 
-#### 1. CLI Application Layer
-Responsible for:
-- launching the session,
-- rendering conversation and status panels,
-- accepting user input,
-- handling keyboard interrupts / graceful exit,
-- showing whether the agent is listening, thinking, idle, deciding, or proactively speaking.
+系统不应表现为：
 
-#### 2. Workflow Layer (agere)
-Use **agere** as the main workflow manager.
+- 每隔固定时间突然补一句
+- 总是“追问”
+- 总是“提醒”
+- 总是“只是确认一下”
+- 在没有自然语境支撑时强行续聊
 
-The workflow layer must explicitly model at least the following states or stages:
-- user input received,
-- assistant reply generation,
-- reply finalization,
-- idle waiting,
-- proactive wake-up,
-- speak / wait decision,
-- proactive generation,
-- cancellation or interruption,
-- error recovery.
+系统应表现为：
 
-Do not hide workflow logic in a single monolithic loop.
+- 有时一句就说完
+- 有时先说一段，停一下，再自然补一句
+- 有时判断此刻沉默更自然
+- 有时在用户沉默时补充一个真正有用的小延续
+- 有时在用户可能卡住时轻量接一句，而不是重新长篇回答
 
-#### 3. Proactive Scheduling / Decision Layer
-Use `leomariga/ProactiveAgent` for the proactive decision backbone.
+### 三，短、自然、可分段，比完整更重要
 
-This layer should:
-- manage wake/sleep style periodic checks,
-- expose configurable minimum and maximum intervals,
-- separate timing policy from response generation,
-- allow the system to remain silent for long periods if appropriate.
+本项目主打日常聊天，不是写说明书。
 
-#### 4. Decision Model Adapter
-A dedicated adapter for `qwen3:1.7b` via Ollama.
+模型输出风格应默认偏向：
 
-This model is responsible for deciding whether the assistant should proactively speak again.
-It must not generate the full end-user response unless explicitly configured for debugging.
-
-Its output should be normalized into a structured decision such as:
-- `WAIT`
-- `SPEAK`
-- optionally with metadata like reason, confidence, suggested urgency, or suggested topic.
-
-#### 5. Dialogue Model Adapter
-A dedicated adapter for `qwen3:14b` via Ollama.
-
-This model is responsible for:
-- normal user-facing responses,
-- proactive follow-up responses when approved by the decision layer,
-- optional streaming token output.
-
-#### 6. Session / Context Manager
-Responsible for:
-- storing recent dialogue turns,
-- tracking timestamps,
-- tracking last user activity,
-- tracking last assistant output,
-- recording whether the assistant has already spoken in the current cycle,
-- providing compact context views for the decision model.
-
-#### 7. Configuration Layer
-All major timings, model names, prompt templates, and UI settings must be configurable.
-Use a structured config file or environment-backed configuration.
+- 较短
+- 自然
+- 口语化
+- 有节奏
+- 可分段
+- 不追求一次讲尽
+- 必要时通过后续自然补充完成更长内容
 
 ---
 
-## Explicit Design Principle: Decision Model vs Dialogue Model
+## 产品定义
 
-The decision model and dialogue model must remain cleanly separated.
+这是一个本地运行的 GUI 对话助手，不是简单聊天窗口，也不是工程调试面板。
 
-### Decision model (`qwen3:1.7b`)
-Use for:
-- whether to proactively speak,
-- whether silence should continue,
-- whether a proactive message would be useful,
-- optionally selecting a proactive intent label.
+它的关键能力是：
 
-Do not use it as the final assistant persona.
+1. 用户正常输入后，助手正常回复。
+2. 助手回复后，进入受控空闲状态。
+3. 在用户没有新输入时，系统会周期性醒来。
+4. 判定模型判断是否值得再次开口。
+5. 如果不值得，则继续沉默。
+6. 如果值得，则由主模型生成一个**短而自然的补充发言**。
+7. 如果用户在此期间输入新消息，用户输入必须优先。
 
-### Dialogue model (`qwen3:14b`)
-Use for:
-- normal assistant replies,
-- proactive follow-up replies,
-- final user-visible text generation.
-
-This separation is mandatory.
+系统必须长期运行稳定，并适合真实日常聊天，而不仅是演示主动能力。
 
 ---
 
-## Decision Policy Requirements
+## 这次迭代的明确方向
 
-The proactive decision system must not be a trivial “always speak every N seconds” mechanic.
+本轮开发目标不再是继续强化 CLI，而是：
 
-It should consider at least:
-- time since last assistant message,
-- time since last user message,
-- whether the assistant already asked a question,
-- whether there is unresolved user intent,
-- whether a follow-up would be helpful,
-- whether another message would be repetitive or annoying,
-- whether the current conversation context gives a natural reason to continue.
-
-A proactive decision should generally be conservative.
-
-The default behavior should prefer silence unless there is a plausible conversational reason to speak.
-
-The project should support two modes:
-
-1. **Rule-assisted decision mode**
-   - rule gates before or after model judgment,
-   - e.g. cooldown windows, duplicate suppression, max consecutive proactive turns.
-
-2. **Model-first decision mode**
-   - the small model is the main judge,
-   - rules act only as safety constraints.
-
-Both modes should be configurable.
+- **将前端主界面改为 GUI**
+- **降低外部规则对交流节奏的主导**
+- **将“自然说话方式”前移到提示词设计**
+- **将判定模型职责做轻**
+- **让主模型学会“短回复 + 可分段补充”**
+- **保留最少但必要的外部安全护栏**
+- **避免把整个系统做成一个啰嗦、机械、爱打断人的助手**
 
 ---
 
-## Minimum Safety / Anti-Spam Constraints
+## 必须保留的架构基础
 
-Implement these constraints by default:
+### 1. 双模型分工必须保留
 
-- minimum cooldown after any assistant message,
-- minimum cooldown after a proactive message,
-- cap on consecutive proactive messages without user reply,
-- duplicate-content suppression,
-- suppression after explicit user disengagement,
-- suppression if the last assistant turn already ends with a direct question unless enough time has passed,
-- immediate cancellation of pending proactive output when a new user message arrives.
+#### 对话模型：`qwen3:14b`
 
-The system should avoid producing repetitive “just checking in” style filler.
+职责：
 
----
+- 正常回答用户消息
+- 在被允许时生成主动补充内容
+- 负责最终用户可见文本
+- 负责“说得像人”
 
-## CLI Requirements
+#### 判定模型：`qwen3:1.7b`
 
-The CLI must be custom-designed and informative. It should not be only:
-- a single prompt line,
-- a plain transcript dump,
-- or a basic `input()` / `print()` loop.
+职责：
 
-### CLI Goals
+- 判断当前是否应该再次开口
+- 输出粗粒度意图，不负责完整内容生成
+- 尽量保持廉价、稳定、快速
 
-The interface should make the system observable during development and usable during long sessions.
+**禁止**把判定模型当作第二个主对话模型使用。
 
-### Required Information Layout
+### 2. `agere` 必须作为真实工作流层存在
 
-Display as many of the following as is reasonable:
+不是装饰性依赖。
 
-#### Header / Session Bar
-- app name,
-- current session ID,
-- uptime,
-- current mode,
-- currently selected models,
-- whether proactive mode is enabled.
+必须显式组织至少这些阶段：
 
-#### State Panel
-- workflow state,
-- current agent phase,
-- idle timer,
-- next wake-up countdown,
-- last user activity time,
-- last assistant activity time,
-- number of consecutive proactive turns.
+- 用户输入到达
+- 主回复生成
+- 主回复完成
+- 空闲等待
+- 周期唤醒
+- 开口判定
+- 主动补充生成
+- 打断 / 取消
+- 错误恢复
 
-#### Conversation Panel
-- clearly rendered user and assistant messages,
-- proactive messages visually distinct,
-- timestamps,
-- optional message IDs or turn numbers.
+### 3. `ProactiveAgent` 必须作为主动节奏骨架存在
 
-#### Decision Diagnostics Panel
-At minimum show concise decision diagnostics such as:
-- last decision = WAIT / SPEAK,
-- decision timestamp,
-- short reason summary,
-- cooldown status,
-- whether a rule gate blocked speaking.
+不是死依赖。
 
-#### Input Area
-- a clear prompt region for user input,
-- support for slash commands.
+它必须实际参与：
 
-### Optional but Strongly Encouraged
-- keyboard shortcuts,
-- collapsible diagnostics,
-- scrollback,
-- event log pane,
-- token / latency stats,
-- debug mode.
-
-### CLI Technical Recommendation
-A rich terminal framework is acceptable and preferred if it improves structure, for example Textual or Rich-based composition. Keep the implementation maintainable.
+- 周期唤醒
+- 睡眠调度
+- 主动检查循环
+- 可配置的间隔策略
 
 ---
 
-## Suggested Slash Commands
+## GUI 版本的产品要求
 
-Implement a practical set of commands such as:
+## 一，前端目标
 
-- `/help`
-- `/quit`
-- `/clear`
-- `/status`
-- `/models`
-- `/proactive on`
-- `/proactive off`
-- `/debug on`
-- `/debug off`
-- `/history`
-- `/config`
-- `/reset`
-- `/poke` (force an immediate proactive decision cycle for testing)
-- `/speak-now` (manual debug trigger for proactive generation)
+GUI 的目标不是展示“我们做了多少系统逻辑”，而是让聊天体验像真实产品。
 
-These commands are not all mandatory, but the CLI must include enough operator control for testing and evaluation.
+默认界面应当：
 
----
+- 干净
+- 易读
+- 长时间使用不疲劳
+- 不把调试信息强行铺在聊天主视图
+- 保留开发者观察入口，但收纳在次级区域
 
-## agere Workflow Requirements
+### 2. GUI 主界面必须至少包含
 
-The implementation must use **agere** as a real workflow orchestration mechanism, not as a decorative dependency.
+#### A. 聊天主区域
 
-### Expected Workflow Shape
+- 显示用户消息
+- 显示助手正常回复
+- 显示助手主动补充回复
+- 主动补充与普通回复要有轻度视觉区分，但不要过于戏剧化
+- 时间戳可选显示
+- 滚动历史稳定可读
 
-At minimum, the workflow should represent logic similar to:
+#### B. 输入区域
 
-1. Wait for user input or timer wake event.
-2. If user input arrives:
-   - cancel pending proactive activity,
-   - append turn to session state,
-   - generate main reply,
-   - stream output to CLI,
-   - update session state,
-   - return to idle.
-3. If timer wake event arrives:
-   - check hard rule gates,
-   - build compact decision context,
-   - ask decision model whether to speak,
-   - if WAIT, schedule next wake,
-   - if SPEAK, generate proactive reply with main model,
-   - render it distinctly,
-   - update counters and timestamps,
-   - return to idle.
-4. If interruption occurs:
-   - stop or suppress pending proactive output,
-   - give priority to user input.
+- 单行或多行输入框
+- 发送按钮
+- 支持快捷键发送
+- 支持取消当前输出
+- 支持用户在空闲期重新夺回控制权
 
-The workflow implementation should be modular enough that future additions such as voice I/O or memory modules can plug in without rewriting the core state machine.
+#### C. 状态区域
 
----
+至少显示：
 
-## ProactiveAgent Integration Requirements
+- 当前模型状态
+- 当前工作流状态
+- 当前是否处于 idle / deciding / responding / proactively speaking
+- 主动模式是否开启
 
-Use `leomariga/ProactiveAgent` for the scheduling / wake-sleep decision backbone where appropriate.
+#### D. 可折叠开发者面板
 
-The code should show clear integration points for:
-- wake-up interval policy,
-- decision execution,
-- sleep calculation,
-- configurable response interval windows,
-- custom decision engine using Ollama-backed `qwen3:1.7b`.
+默认可隐藏，但必须存在，显示：
 
-Do not reduce ProactiveAgent to a dead dependency. The repository should make it obvious how and where it contributes to runtime behavior.
+- 最近一次判定结果
+- 最近一次判定原因摘要
+- 下一次唤醒时间或倒计时
+- 当前 cooldown 状态
+- 连续主动轮次数
+- 最近一次被规则阻止的原因
+- latency / token / streaming 统计（有则显示）
+
+### 3. 不应继续沿用 CLI 思路直接平移
+
+GUI 不是把 CLI 面板照搬成窗口。
+
+要重新思考：
+
+- 什么该默认给用户看
+- 什么只该给开发者看
+- 什么信息会破坏“像人聊天”的感觉
+- 什么信息会真正帮助调试
 
 ---
 
-## Ollama Integration Requirements
+## 交流节奏设计原则
 
-The project must run locally with Ollama.
+## 一，默认输出要短
 
-### Required capabilities
-- configure model names from settings,
-- health check Ollama connectivity on startup,
-- fail gracefully if a model is unavailable,
-- cleanly separate decision-model and dialogue-model clients,
-- support generation parameters by role,
-- optionally support streaming for the dialogue model.
+正常日常聊天默认应为：
 
-### Baseline model assignments
-- Dialogue model: `qwen3:14b`
-- Decision model: `qwen3:1.7b`
+- 1 到 3 句为主
+- 只有在用户明确要求详细说明时才扩展
+- 不要默认写成教程、报告、论文、结构化说明书
 
-These should be defaults, not hardcoded constants that are difficult to change.
+### 二，允许分两次以上说完
 
----
+如果内容较长，模型应允许采用这种方式：
 
-## Prompting Requirements
+- 先说最关键的一小段
+- 停顿
+- 如果用户没有立刻回应，且确实还有自然可补充内容，再补一句或一小段
+- 而不是一开始就把所有内容倾倒出来
 
-Create separate prompt templates for:
+### 三，主动补充必须比普通回复更短、更轻
 
-1. **Main assistant reply**
-2. **Proactive decision judgment**
-3. **Proactive message generation**
-4. **Optional summarization or compact context extraction**
+主动补充的目标不是“重新回答一遍”。
 
-### Decision Prompt Expectations
-The decision prompt should be optimized for structured output. Prefer short deterministic output, for example JSON or a strict tag format.
+主动补充更适合是：
 
-Example conceptual output:
+- 补一句
+- 换个更容易理解的说法
+- 给一个更具体的小例子
+- 做一个轻量提醒
+- 帮用户把可能没说出的下一步接上
 
-```json
-{
-  "decision": "WAIT",
-  "reason": "assistant already asked a question and cooldown not elapsed",
-  "confidence": 0.81
-}
-```
+而不是：
 
-The exact schema may differ, but it must be machine-parseable and resilient.
+- 再写一大段
+- 再罗列一遍
+- 再总结一遍
+- 再问一串问题
 
-### Proactive Generation Prompt Expectations
-The proactive generation prompt must constrain style to avoid:
-- repetitive follow-up spam,
-- unnatural self-interruptions,
-- generic filler,
-- claims of background awareness the system does not have.
+### 四，沉默本身也是一种自然行为
+
+系统必须学会“有些时候不再说话更自然”。
+
+主动能力的上限，不是多说，而是知道什么时候不说。
 
 ---
 
-## Session State Requirements
+## 判定模型的职责收缩
 
-Track at least:
-- turn history,
-- timestamps for each turn,
-- last user turn time,
-- last assistant turn time,
-- last proactive turn time,
-- last decision result,
-- consecutive proactive count,
-- whether the assistant is awaiting user answer,
-- whether a pending proactive attempt was cancelled,
-- current workflow state.
+由于 `qwen3:1.7b` 开销低、能力有限，本项目不要求它做复杂社交推理。
 
-This state must be inspectable in debug mode.
+它的职责必须被刻意收缩到：
 
----
+- 判断：`WAIT` 或 `SPEAK`
+- 输出一个非常粗粒度的意图类别，例如：
+  - `continue`
+  - `clarify`
+  - `remind`
+  - `check`
+  - `wrap`
+- 输出一句简短原因摘要，可选
+- 可选输出一个非常粗的建议等待时间，但不能依赖其高精度
 
-## Logging and Observability
+### 明确禁止
 
-The project must include useful logs.
+不要要求判定模型承担这些重任务：
 
-### Required logs
-- startup and model readiness,
-- workflow transitions,
-- decision cycles,
-- decision outputs,
-- proactive suppression reasons,
-- generation failures,
-- interruption handling,
-- shutdown.
+- 生成完整用户可见回复
+- 做复杂人格维护
+- 规划长链对话
+- 做高精度社交心理分析
+- 推断过多隐含语义
+- 高可靠地选择“最佳话题”
 
-### Strongly encouraged
-- structured logs,
-- separate debug vs user-facing logs,
-- optional session transcript export,
-- optional event timeline export for evaluation.
+### 设计原则
+
+宁可让判定模型简单但稳，也不要让它聪明但乱。
 
 ---
 
-## Error Handling Requirements
+## 外部系统的角色边界
 
-The system must fail predictably.
+本项目并不追求“完全没有外部系统”。
 
-Handle at minimum:
-- Ollama unavailable,
-- missing model,
-- malformed decision output,
-- timeout from decision model,
-- timeout from dialogue model,
-- interrupted render,
-- invalid config,
-- user pressing Ctrl+C,
-- workflow cancellation race conditions.
+而是追求：
 
-Where possible, recover and return to a usable idle state instead of crashing.
+- 外部系统不要主导交流内容
+- 外部系统不要过度主导交流节奏
+- 外部系统只负责最必要的护栏与物理协调
 
----
+### 外部系统应保留的能力
 
-## Repository Structure Expectations
+只保留以下必要护栏：
 
-A clean repository structure is expected. A possible layout:
+- 最小冷却时间
+- 用户新输入优先级最高
+- 连续主动轮次上限
+- 明显重复抑制
+- 用户明确 disengage 后的抑制
+- 当前输出可取消
+- 错误恢复
+- 资源与请求调度
 
-```text
-project/
-  app/
-    cli/
-    workflow/
-    agents/
-    adapters/
-    prompts/
-    state/
-    services/
-    config/
-    utils/
-  tests/
-    unit/
-    integration/
-    e2e/
-  scripts/
-  docs/
-  AGENTS.md
-  README.md
-  pyproject.toml
-```
+### 外部系统不应继续承担太多语义判断
 
-Exact names may vary, but separation of concerns must be obvious.
+尽量不要继续堆很多类似：
+
+- 是否已经问过问题
+- 是否应该追问
+- 是否应该展开
+- 是否应该安慰
+- 是否应该继续规划
+
+这些应更多交给提示词和主模型。
 
 ---
 
-## Code Quality Requirements
+## 睡眠与主动节奏策略
 
-- Use Python with clear typing.
-- Prefer small focused modules over large files.
-- Keep workflow logic explicit and testable.
-- Avoid hidden global state.
-- Use dataclasses or equivalent structured objects for session and decision data.
-- Provide docstrings where they add value.
-- Keep prompt templates versioned and easy to edit.
-- Avoid tightly coupling CLI rendering to agent logic.
+不再把主动节奏仅仅理解为“固定大周期轮询”。
 
----
+本项目应引入**两层时间尺度**。
 
-## Test Requirements
+### 一，短延续窗口
 
-A serious testing baseline is required.
+用于模拟人类“刚说完，又自然补一句”的情况。
 
-### Unit tests
-Test at least:
-- decision parsing,
-- cooldown logic,
-- duplicate suppression,
-- state transitions,
-- config loading,
-- slash command handling.
+特点：
 
-### Integration tests
-Test at least:
-- decision model adapter with mocked Ollama,
-- dialogue model adapter with mocked Ollama,
-- proactive cycle from idle to decision to response,
-- interruption on new user input,
-- workflow recovery after model error.
+- 时间更短
+- 更谨慎
+- 只允许很轻的 continuation
+- 内容必须更短
+- 不能变成二次长篇回答
 
-### End-to-end tests
-At minimum, include one or more scripted terminal-session style tests that validate:
-- normal reply path,
-- idle wait path,
-- proactive speak path,
-- proactive suppression path,
-- user interruption path.
+适用场景：
 
-Mocked tests are acceptable for CI reliability, but at least one documented manual runbook for real local Ollama validation is required.
+- 刚刚回答完一个稍长问题
+- 还有一个自然但未说出的关键补充
+- 用户似乎还没来得及接话
+- 此时沉默并非最自然
 
----
+### 二，较长主动窗口
 
-## Performance Expectations
+用于真正的“后续主动发言”。
 
-This is a local system. Responsiveness matters.
+特点：
 
-### Soft targets
-- decision cycle should feel lightweight compared with full reply generation,
-- user input should interrupt pending proactive activity promptly,
-- CLI should remain readable during long sessions,
-- the agent should not accumulate runaway background tasks.
+- 时间更长
+- 更保守
+- 频率更低
+- 主要用于少量有价值的 follow-up
 
-Do not over-optimize prematurely, but avoid obviously blocking architecture mistakes.
+### 设计要求
+
+允许外部系统提供“短窗口”和“长窗口”两种调度层次，但不要把每一种具体行为都硬编码。
+
+模型应当理解：
+
+- 短窗口更适合补半句或一小段
+- 长窗口才适合真正再次开启一轮主动补充
 
 ---
 
-## Deliverables
+## 提示词设计要求
 
-The implementation is expected to produce:
+这是本轮最重要的开发重点之一。
 
-1. A runnable local CLI application.
-2. Working Ollama integration for both models.
-3. agere-based workflow orchestration.
-4. ProactiveAgent-backed periodic proactive decision loop.
-5. Clear configuration and prompt files.
-6. Tests.
-7. Documentation sufficient for local setup and usage.
+项目必须重新设计以下提示词，不允许继续只用非常薄的提示。
 
----
+### 1. 主对话提示词
 
-## Acceptance Targets
+目标：
 
-The project is accepted only if all of the following are true.
+- 规范日常聊天语气
+- 规范长度
+- 规范节奏
+- 规范“先说一点，再视情况补一句”的风格
+- 规范如何使用系统提供的功能与状态
 
-### A. Startup and Configuration
-- The app starts locally from documented instructions.
-- It verifies Ollama availability.
-- It clearly reports missing models or configuration problems.
+必须明确教给主模型：
 
-### B. Normal Dialogue
-- The user can chat with the assistant in the CLI.
-- The main model uses `qwen3:14b` by default.
-- Assistant output is rendered clearly and reliably.
+- 默认简短自然
+- 不要每轮都写成长答
+- 不要总是结构化列点
+- 不要强迫总结
+- 可以分段表达
+- 如果内容适合分两次说，不必第一次全说完
+- 用户问明确知识问题时可以更清晰，但仍避免冗长
+- 不要在每次主动补充时显得像在“履行程序”
+- 不要假装自己拥有并不存在的感知、记忆或后台能力
 
-### C. Proactive Decision Pipeline
-- After the assistant has already replied, the system can enter idle mode.
-- During idle, the system periodically wakes without user input.
-- The decision model uses `qwen3:1.7b` by default.
-- The decision result is structurally parsed and visible in debug/status output.
-- The system can both choose `WAIT` and choose `SPEAK` under different contexts.
+### 2. 主动补充生成提示词
 
-### D. Proactive Output
-- When the decision is `SPEAK`, the system generates a proactive follow-up with the main model.
-- Proactive messages are visibly distinguished from normal replies.
-- The system does not spam repeated follow-ups due to missing cooldown protection.
+目标：
 
-### E. Interruption and Control
-- A new user message can interrupt or supersede pending proactive behavior.
-- Slash commands provide basic runtime control.
-- The user can disable proactive mode during a session.
+- 让模型知道“主动补一句”应该长什么样
 
-### F. Workflow Integrity
-- agere is actually used to organize workflow transitions.
-- ProactiveAgent is actually used in the proactive scheduling / wake-sleep logic.
-- The implementation is modular enough that the decision layer can be swapped later.
+必须明确约束：
 
-### G. CLI Quality
-- The CLI is not a barebones prompt loop.
-- It displays useful live session information.
-- It remains readable over extended interaction.
+- 默认比普通回复更短
+- 优先自然延续，而非重复回答
+- 优先“补一个有价值的小点”
+- 不要每次都以问句收尾
+- 不要每次都“确认一下”“提醒一下”
+- 不要自我解释系统机制
+- 不要显得像定时器触发
+- 不要显得像客服话术
 
-### H. Reliability
-- The program handles common failures without immediate unrecoverable crash.
-- Tests exist for critical proactive logic.
+### 3. 判定提示词
 
-If any of the above are missing, the project is not complete.
+目标：
 
----
+- 让 `qwen3:1.7b` 稳定输出极简可解析结果
 
-## Stretch Goals
+必须明确：
 
-These are optional and should not delay the core deliverable:
+- 优先 WAIT
+- 只有在“此刻再补一句明显更自然或更有帮助”时才 SPEAK
+- 输出极小 JSON
+- 不要生成多余内容
+- 不要替主模型写答案
 
-- voice input/output adapters,
-- transcript export,
-- persistence across sessions,
-- summarization memory,
-- richer Textual UI,
-- configurable decision explanations,
-- replayable event traces,
-- benchmark scripts for proactive behavior evaluation.
+### 4. 可选的上下文压缩提示词
+
+如果需要上下文摘要，摘要必须服务于“主动时机判定”和“自然延续”，而不是做全量复杂总结。
 
 ---
 
-## Evaluation Scenarios
+## 主模型的说话方式规范
 
-The following scenarios should be manually demonstrated.
+以下是主模型必须遵守的风格方向。
 
-### Scenario 1: Standard Chat
-User asks a normal question. Assistant answers. No proactive follow-up occurs during cooldown.
+### 一，像聊天，不像文档
 
-### Scenario 2: Useful Proactive Follow-up
-User asks for help planning something, assistant answers partially, context naturally supports a follow-up, idle cycle triggers a `SPEAK`, and assistant offers a useful continuation.
+除非用户明确要求详细、系统、正式输出，否则默认更像日常人类聊天。
 
-### Scenario 3: Suppressed Follow-up
-Assistant already asked a direct question. Idle cycle runs. Decision system or rules suppress another message.
+### 二，尽量避免这些风格
 
-### Scenario 4: User Interrupts
-System is idle or preparing a proactive response. User types a new message. User input takes priority cleanly.
+- 每次都很长
+- 每次都像标准答案
+- 每次都像说明书
+- 每次都列很多条
+- 每次都过度礼貌
+- 每次都重复上下文
+- 每次都做收尾总结
 
-### Scenario 5: Debug Observability
-Operator can inspect current state, last decision, cooldowns, and proactive counters from the CLI.
+### 三，鼓励这些风格
 
----
+- 自然短句
+- 分段表达
+- 有轻微口语感
+- 内容聚焦
+- 一次只推进一点
+- 在长内容场景下允许后续再补
 
-## Non-Goals
+### 四，主动补充的语气必须更轻
 
-Do not spend core project time on:
-- web frontend,
-- cloud deployment,
-- multi-user server mode,
-- animated avatars,
-- nonessential plugin ecosystems,
-- premature generalization into a framework.
-
-The focus is a robust local proactive CLI agent.
+主动补充像“顺着刚才再说一句”，而不是“启动新回复”。
 
 ---
 
-## Final Instruction to the Coding Agent
+## GUI 技术与架构要求
 
-When implementation tradeoffs arise, prioritize:
+### 一，前后端边界要更清楚
 
-1. correctness of proactive workflow,
-2. clear separation of decision and dialogue roles,
-3. observability in the CLI,
-4. interruption safety,
-5. maintainable modular structure.
+GUI 层只负责：
 
-Avoid fake completion. If a dependency cannot support the intended role directly, build a thin adapter and document the limitation clearly.
+- 展示消息
+- 展示状态
+- 接收输入
+- 触发操作
+- 呈现调试信息
 
-The final result should be something that a developer can run locally, inspect easily, and use to verify that proactive re-speaking works in a controlled and testable way.
+不要把核心业务逻辑塞进 GUI 组件。
+
+### 二，核心引擎必须可被 GUI 和测试复用
+
+保留或重构出明确的 engine 层，负责：
+
+- 会话状态
+- 工作流推进
+- 判定调用
+- 主模型调用
+- 主动调度
+- 事件广播
+
+GUI 只是 engine 的一个前端。
+
+### 三，仍应保留“可调试性”
+
+即使主产品改为 GUI，也应尽可能保持：
+
+- 日志清晰
+- 状态可观察
+- 事件可追踪
+- 可测试
+- 可在无 GUI 情况下做自动化测试
+
+---
+
+## Ollama 集成优化要求
+
+当前迭代必须关注运行速度与交互体感。
+
+### 必须改进的方向
+
+- 尽量复用连接，不要每次请求都创建昂贵的新链路
+- 明确支持模型常驻/保活策略
+- 对 `qwen3:1.7b` 的判定调用保持轻量
+- 对主模型的主动补充请求，尽量减少无意义上下文
+- 区分普通回复和主动补充的 generation 参数
+- 启动时进行健康检查与模型可用性检查
+- 出错时可恢复，不要轻易崩溃
+
+### 性能原则
+
+用户体感比理论“最优决策”更重要。
+
+如果某个设计虽然更“聪明”，但明显拖慢：
+
+- 判定速度
+- 首 token 时间
+- 打断响应
+- GUI 流畅度
+
+则应优先选择更简单稳定的方案。
+
+---
+
+## 会话状态要求
+
+系统至少应维护以下状态：
+
+- 对话历史
+- 每轮时间戳
+- 上次用户发言时间
+- 上次助手发言时间
+- 上次主动发言时间
+- 最近一次判定结果
+- 最近一次判定原因
+- 连续主动轮次数
+- 当前是否处于短延续窗口
+- 当前是否处于较长主动窗口
+- 当前工作流状态
+- 是否有待取消的主动任务
+- 是否刚被用户打断
+
+这些状态必须可供：
+
+- GUI 状态展示
+- 调试面板显示
+- 测试断言
+- 工作流决策
+
+---
+
+## Slash/GUI 控制能力要求
+
+即使主界面改为 GUI，仍需保留操作控制能力。
+
+至少应支持：
+
+- 开关主动模式
+- 查看模型状态
+- 查看调试信息
+- 清空当前会话
+- 重置状态
+- 手动触发一次判定循环
+- 手动触发一次主动补充测试
+- 打开/关闭开发者面板
+- 导出日志或会话记录（可选）
+
+---
+
+## 测试要求
+
+必须继续保持真实可验收，而不是只有界面。
+
+### 单元测试至少覆盖
+
+- 判定结果解析
+- 冷却逻辑
+- 重复抑制
+- 连续主动轮次限制
+- 状态切换
+- 提示词装配
+- GUI 与核心状态解耦处的关键逻辑
+
+### 集成测试至少覆盖
+
+- Ollama 对话模型适配器
+- Ollama 判定模型适配器
+- 从 idle 到 decision 到 proactive generation 的完整链路
+- 用户新输入打断主动发言
+- 主动模式关闭时的行为
+- GUI 事件与核心引擎通信
+
+### 端到端验证至少覆盖
+
+- 正常对话
+- 短回复
+- 短窗口下自然补一句
+- 长窗口下主动继续
+- 应该沉默时不说
+- 用户打断成功
+- 调试面板信息正确显示
+
+---
+
+## 验收目标
+
+项目只有在以下条件全部满足时才算完成。
+
+### A. GUI 成功取代 CLI 成为主界面
+
+- 启动后默认进入 GUI
+- GUI 可稳定聊天
+- GUI 不只是把 CLI 文本嵌进去
+- GUI 具备主聊天区、输入区、状态区、可折叠调试区
+
+### B. 双模型职责清晰
+
+- `qwen3:14b` 负责最终可见对话
+- `qwen3:1.7b` 负责 speak/wait 粗判定
+- 判定模型不承担主回复生成
+
+### C. 主动发言更自然
+
+- 系统能在部分场景下自然补一句
+- 主动补充默认明显短于正常回复
+- 不会频繁重复
+- 不会明显像定时器
+- 不会每次主动发言都很机械
+
+### D. 说话方式符合日常聊天定位
+
+- 默认回复明显比当前原型更短、更自然
+- 不会频繁出现论文式回答
+- 长内容场景下，允许分多次自然说完
+- 主动补充不是重说一遍
+
+### E. 外部规则被收缩
+
+- 系统仍有必要护栏
+- 但不再大量依赖外部规则决定具体说什么、怎么说
+- 提示词与主模型承担更多自然交流责任
+
+### F. 工作流仍然清晰
+
+- `agere` 仍真实参与工作流管理
+- `ProactiveAgent` 仍真实参与唤醒/睡眠节奏
+- 主动行为不是散落在前端逻辑里的 hack
+
+### G. 性能体感改善
+
+- GUI 使用流畅
+- 判定调用足够快
+- 主动补充不会明显拖慢系统
+- 用户打断响应及时
+- 长时间运行稳定
+
+### H. 可观察、可调试、可测试
+
+- 开发者可以查看当前状态
+- 最近一次判定可见
+- 最近一次阻止原因可见
+- 日志清晰
+- 关键行为有测试覆盖
+
+---
+
+## 非目标
+
+本轮不优先追求：
+
+- 多模态
+- 语音输入输出
+- 云部署
+- Web 前端
+- 多用户系统
+- 复杂长期记忆
+- 插件生态
+- 花哨动画形象
+
+这些都不是当前主问题。
+
+当前主问题是：
+
+- 交流节奏不够自然
+- 输出风格不够像日常聊天
+- 外部系统痕迹太重
+- GUI 产品感不足
+- 运行体感需要优化
+
+---
+
+## 对编码代理的最终指令
+
+当实现取舍出现冲突时，优先级如下：
+
+1. **让交流更自然**
+2. **让默认输出更短、更像聊天**
+3. **让系统学会分段表达，而不是一次讲尽**
+4. **减少外部规则对具体交流内容和节奏的主导**
+5. **保持双模型职责清晰**
+6. **保证 GUI 产品感**
+7. **保证运行速度与打断响应**
+8. **保持工作流清楚、可调试、可测试**
+
+不要为了“看起来智能”而增加一堆复杂机制。
+
+不要为了“更像自主体”而让系统变得啰嗦、迟钝、爱打扰。
+
+不要为了“减少外部系统”而完全移除必要护栏。
+
+最终结果必须是一个本地可运行、GUI 交互自然、能短聊、能自然补一句、并且整体更接近人类交流节奏的主动式助手。

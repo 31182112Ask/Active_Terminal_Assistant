@@ -26,8 +26,9 @@ def build_compact_decision_context(snapshot: SessionSnapshot) -> str:
         f"last_assistant_activity: {_fmt_delta(snapshot.last_assistant_activity)}\n"
         f"last_proactive_activity: {_fmt_delta(snapshot.last_proactive_activity)}\n"
         f"awaiting_user_answer: {snapshot.awaiting_user_answer}\n"
+        f"recently_interrupted: {snapshot.recently_interrupted}\n"
         f"consecutive_proactive_turns: {snapshot.consecutive_proactive_turns}\n"
+        f"current_window: {snapshot.current_proactive_window or 'none'}\n"
         f"last_rule_block: {snapshot.last_rule_block or 'none'}\n"
         f"recent_transcript:\n{transcript}"
     )
-

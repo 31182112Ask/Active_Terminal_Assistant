@@ -26,8 +26,10 @@ def _snapshot(**overrides) -> SessionSnapshot:
         consecutive_proactive_turns=0,
         awaiting_user_answer=False,
         pending_proactive_cancelled=False,
+        recently_interrupted=False,
         next_wake_up_at=None,
         last_sleep_reason=None,
+        current_proactive_window=None,
         last_rule_block=None,
         last_error=None,
         dialogue_model="dialogue",
@@ -75,4 +77,16 @@ def test_post_generation_duplicate_suppression() -> None:
     result = gate.evaluate_post_model(snapshot, "I can help you make a checklist.")
     assert result.allowed is False
     assert "duplicate" in result.reason
+
+
+def test_rule_gate_blocks_when_recently_interrupted() -> None:
+    config = ProactiveConfig(min_assistant_cooldown_seconds=0)
+    gate = RuleGateService(config)
+    snapshot = _snapshot(
+        recently_interrupted=True,
+        last_assistant_activity=datetime.now() - timedelta(minutes=2),
+    )
+    result = gate.evaluate_pre_model(snapshot)
+    assert result.allowed is False
+    assert result.reason == "user recently interrupted the assistant"
 

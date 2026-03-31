@@ -3,9 +3,11 @@ from app.adapters.decision import DecisionModelAdapter, DecisionOutputParseError
 
 def test_decision_parser_accepts_json_object() -> None:
     parsed = DecisionModelAdapter.parse(
-        '{"decision":"SPEAK","reason":"unresolved plan","confidence":0.84,"urgency":"medium","suggested_topic":"next steps"}'
+        '{"decision":"SPEAK","intent":"continue","window":"short","reason":"unresolved plan","confidence":0.84,"urgency":"medium","suggested_topic":"next steps"}'
     )
     assert parsed.decision == "SPEAK"
+    assert parsed.intent == "continue"
+    assert parsed.window == "short"
     assert parsed.reason == "unresolved plan"
     assert parsed.confidence == 0.84
     assert parsed.suggested_topic == "next steps"
@@ -26,4 +28,3 @@ def test_decision_parser_rejects_invalid_decision() -> None:
         assert "invalid decision" in str(exc)
     else:
         raise AssertionError("parser should reject invalid decisions")
-

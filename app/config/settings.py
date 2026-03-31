@@ -21,13 +21,18 @@ class ModelsConfig(BaseModel):
 
 class ProactiveConfig(BaseModel):
     enabled: bool = True
-    decision_mode: Literal["rule-assisted", "model-first"] = "rule-assisted"
-    min_assistant_cooldown_seconds: int = 30
-    min_proactive_cooldown_seconds: int = 45
-    question_cooldown_seconds: int = 90
+    decision_mode: Literal["rule-assisted", "model-first"] = "model-first"
+    min_assistant_cooldown_seconds: int = 18
+    min_proactive_cooldown_seconds: int = 28
+    question_cooldown_seconds: int = 75
     max_consecutive_proactive_turns: int = 2
-    min_sleep_seconds: int = 20
+    min_sleep_seconds: int = 8
     max_sleep_seconds: int = 120
+    short_window_min_sleep_seconds: int = 6
+    short_window_max_sleep_seconds: int = 18
+    long_window_min_sleep_seconds: int = 30
+    long_window_max_sleep_seconds: int = 150
+    recent_reply_threshold_seconds: int = 35
     duplicate_similarity_threshold: float = 0.92
     wake_up_pattern: str = "Stay conservative. Wake more often in active conversations and less often when the user is idle."
     min_response_interval: int = 20
@@ -43,6 +48,16 @@ class CliConfig(BaseModel):
     show_event_log: bool = True
 
 
+class GuiConfig(BaseModel):
+    enabled: bool = True
+    title: str = "Active Terminal Assistant"
+    width: int = 1280
+    height: int = 860
+    poll_interval_ms: int = 180
+    chat_font_size: int = 12
+    developer_panel_open: bool = False
+
+
 class LoggingConfig(BaseModel):
     level: str = "INFO"
     directory: str = "logs"
@@ -52,6 +67,7 @@ class AppConfig(BaseModel):
     models: ModelsConfig = Field(default_factory=ModelsConfig)
     proactive: ProactiveConfig = Field(default_factory=ProactiveConfig)
     cli: CliConfig = Field(default_factory=CliConfig)
+    gui: GuiConfig = Field(default_factory=GuiConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
 
 
@@ -70,6 +86,8 @@ ENV_MAP: dict[str, tuple[str, str, Any]] = {
     "LPA_MAX_SLEEP_SECONDS": ("proactive", "max_sleep_seconds", int),
     "LPA_DEBUG": ("cli", "debug", bool),
     "LPA_REFRESH_HZ": ("cli", "refresh_hz", int),
+    "LPA_GUI_ENABLED": ("gui", "enabled", bool),
+    "LPA_GUI_POLL_INTERVAL_MS": ("gui", "poll_interval_ms", int),
     "LPA_LOG_LEVEL": ("logging", "level", str),
 }
 

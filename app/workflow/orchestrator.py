@@ -115,6 +115,9 @@ class WorkflowOrchestrator:
         self._state.log_event("manual proactive generation requested", level="debug")
         self._enqueue(self._handle_proactive_generation({"forced": True, "reason": "manual /speak-now"}))
 
+    def cancel_active_output(self) -> None:
+        self._enqueue(self._handle_cancellation("manual cancel requested"))
+
     def set_proactive_enabled(self, enabled: bool) -> None:
         self._state.set_proactive_enabled(enabled)
         self._state.log_event(f"proactive mode {'enabled' if enabled else 'disabled'}")
@@ -157,8 +160,9 @@ class WorkflowOrchestrator:
             self._logger.warning("Commander not running; dropped job")
 
     def _on_sleep_planned(self, sleep_seconds: int, reason: str) -> None:
-        self._state.set_sleep_plan(sleep_seconds, reason)
-        self._state.log_event(f"next wake scheduled in {sleep_seconds}s: {reason}", level="debug")
+        window, summary = self._parse_sleep_reason(reason)
+        self._state.set_sleep_plan(sleep_seconds, summary, window)
+        self._state.log_event(f"next wake scheduled in {sleep_seconds}s ({window or 'n/a'}): {summary}", level="debug")
 
     def _on_scheduler_wake(self, context: dict[str, Any]) -> None:
         self._enqueue(self._handle_timer_wake(context))
@@ -178,6 +182,15 @@ class WorkflowOrchestrator:
     def _recent_messages(self) -> list[dict[str, str]]:
         snapshot = self._state.snapshot()
         return [{"role": turn.role, "content": turn.content} for turn in snapshot.turns[-self._config.models.max_context_turns :]]
+
+    @staticmethod
+    def _parse_sleep_reason(reason: str) -> tuple[str | None, str]:
+        if ":" not in reason:
+            return None, reason
+        maybe_window, summary = reason.split(":", 1)
+        if maybe_window in {"short", "long"}:
+            return maybe_window, summary.strip()
+        return None, reason
 
     async def _decision_via_model(
         self,
@@ -333,6 +346,8 @@ class WorkflowOrchestrator:
                 reason=parsed.reason or model_reason,
                 confidence=parsed.confidence,
                 source="model",
+                intent=parsed.intent,
+                window=parsed.window if parsed.window in {"short", "long"} else snapshot.current_proactive_window,
                 suggested_topic=parsed.suggested_topic,
                 urgency=parsed.urgency,
             )

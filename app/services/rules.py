@@ -26,6 +26,8 @@ class RuleGateService:
             return RuleGateResult(False, "no conversation history yet")
         if snapshot.pending_proactive_cancelled:
             return RuleGateResult(False, "a proactive attempt was just cancelled by user input")
+        if snapshot.recently_interrupted:
+            return RuleGateResult(False, "user recently interrupted the assistant")
         if snapshot.consecutive_proactive_turns >= self._config.max_consecutive_proactive_turns:
             return RuleGateResult(False, "max consecutive proactive turns reached")
         last_user = next((turn for turn in reversed(snapshot.turns) if turn.role == "user"), None)
@@ -58,4 +60,3 @@ class RuleGateService:
         if proactive_turns and similarity_ratio(proactive_turns[-1].content, candidate_text) >= self._config.duplicate_similarity_threshold:
             return RuleGateResult(False, "matches previous proactive message")
         return RuleGateResult(True, "content accepted")
-

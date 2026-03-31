@@ -31,8 +31,10 @@ class SessionStateManager:
         self._consecutive_proactive_turns = 0
         self._awaiting_user_answer = False
         self._pending_proactive_cancelled = False
+        self._recently_interrupted = False
         self._next_wake_up_at: datetime | None = None
         self._last_sleep_reason: str | None = None
+        self._current_proactive_window: str | None = None
         self._last_rule_block: str | None = None
         self._last_error: str | None = None
         self._dialogue_model = dialogue_model
@@ -77,6 +79,7 @@ class SessionStateManager:
                 self._last_user_activity = turn.created_at
                 self._consecutive_proactive_turns = 0
                 self._pending_proactive_cancelled = False
+                self._recently_interrupted = False
             elif role == "assistant":
                 self._last_assistant_activity = turn.created_at
                 if proactive:
@@ -95,8 +98,10 @@ class SessionStateManager:
             self._last_rule_block = None
             self._last_decision = None
             self._pending_proactive_cancelled = False
+            self._recently_interrupted = False
             self._next_wake_up_at = None
             self._last_sleep_reason = None
+            self._current_proactive_window = None
 
     def start_draft(self, proactive: bool = False) -> None:
         with self._lock:
@@ -113,6 +118,7 @@ class SessionStateManager:
         with self._lock:
             self._draft = None
             self._pending_proactive_cancelled = user_cancelled
+            self._recently_interrupted = user_cancelled
 
     def finalize_draft(self) -> MessageTurn | None:
         with self._lock:
@@ -132,14 +138,16 @@ class SessionStateManager:
             self._last_decision = decision
             self._last_rule_block = decision.blocked_by_rule
 
-    def set_sleep_plan(self, seconds: int, reason: str) -> None:
+    def set_sleep_plan(self, seconds: int, reason: str, window: str | None = None) -> None:
         with self._lock:
             self._next_wake_up_at = datetime.fromtimestamp(datetime.now().timestamp() + seconds)
             self._last_sleep_reason = reason
+            self._current_proactive_window = window
 
     def clear_sleep_plan(self) -> None:
         with self._lock:
             self._next_wake_up_at = None
+            self._current_proactive_window = None
 
     def set_rule_block(self, reason: str | None) -> None:
         with self._lock:
@@ -171,8 +179,10 @@ class SessionStateManager:
                 consecutive_proactive_turns=self._consecutive_proactive_turns,
                 awaiting_user_answer=self._awaiting_user_answer,
                 pending_proactive_cancelled=self._pending_proactive_cancelled,
+                recently_interrupted=self._recently_interrupted,
                 next_wake_up_at=self._next_wake_up_at,
                 last_sleep_reason=self._last_sleep_reason,
+                current_proactive_window=self._current_proactive_window,
                 last_rule_block=self._last_rule_block,
                 last_error=self._last_error,
                 dialogue_model=self._dialogue_model,

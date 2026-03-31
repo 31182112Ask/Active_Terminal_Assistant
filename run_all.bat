@@ -15,8 +15,8 @@ call .venv\Scripts\python.exe scripts\prepare_runtime.py || goto :error
 echo [check] validating Ollama connectivity...
 call .venv\Scripts\python.exe scripts\check_ollama.py || goto :error
 
-echo [run] starting Local Proactive CLI Agent...
-call .venv\Scripts\python.exe scripts\run_cli.py
+echo [run] starting Active Terminal Assistant GUI...
+call .venv\Scripts\python.exe scripts\run_gui.py
 goto :eof
 
 :error
