@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-proactive-cli-agent"
+version = "0.1.0"
+description = "Local proactive CLI assistant built with Ollama, agere, and ProactiveAgent."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "agere>=0.2.0",
+  "httpx>=0.28.1",
+  "proactiveagent>=0.1.1",
+  "pydantic>=2.12.0",
+  "rich>=14.3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.4.0",
+  "pytest-asyncio>=1.1.0",
+]
+
+[project.scripts]
+local-proactive-agent = "app.cli.main:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.setuptools.package-data]
+"app.prompts" = ["*.txt"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

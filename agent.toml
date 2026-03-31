@@ -1,0 +1,27 @@
+[models]
+dialogue = "qwen3:14b"
+decision = "qwen3:1.7b"
+base_url = "http://127.0.0.1:11434"
+request_timeout_seconds = 120.0
+stream = true
+
+[proactive]
+enabled = true
+decision_mode = "rule-assisted"
+min_assistant_cooldown_seconds = 30
+min_proactive_cooldown_seconds = 45
+question_cooldown_seconds = 90
+max_consecutive_proactive_turns = 2
+min_sleep_seconds = 20
+max_sleep_seconds = 120
+duplicate_similarity_threshold = 0.92
+user_disengagement_phrases = ["bye", "goodbye", "stop", "leave me alone", "thanks that's all", "不用了", "先这样", "再见"]
+
+[cli]
+refresh_hz = 4
+max_visible_turns = 10
+max_visible_events = 8
+debug = true
+
+[logging]
+level = "INFO"
