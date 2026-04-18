@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+<rect width="100%" height="100%" fill="#fcfcf8"/>
+<text x="60" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#1f2933">Human Reference vs Model Wait Time</text>
+<text x="60" y="86" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#52606d">Manual human-reference labels compared against the current wait-policy bundle.</text>
+<rect x="80" y="120" width="620" height="500" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.5" rx="16"/>
+<text x="102" y="152" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600" fill="#102a43">Follow-up cases: human wait vs model wait</text>
+<line x1="162.1" y1="166" x2="162.1" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="544.3" x2="676" y2="544.3" stroke="#e9eef2" stroke-width="1"/>
+<text x="162.1" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">30s</text>
+<text x="126" y="548.3" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">30s</text>
+<line x1="203.2" y1="166" x2="203.2" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="514.0" x2="676" y2="514.0" stroke="#e9eef2" stroke-width="1"/>
+<text x="203.2" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">60s</text>
+<text x="126" y="518.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">60s</text>
+<line x1="298.7" y1="166" x2="298.7" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="443.7" x2="676" y2="443.7" stroke="#e9eef2" stroke-width="1"/>
+<text x="298.7" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">5m</text>
+<text x="126" y="447.7" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">5m</text>
+<line x1="405.1" y1="166" x2="405.1" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="365.4" x2="676" y2="365.4" stroke="#e9eef2" stroke-width="1"/>
+<text x="405.1" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">30m</text>
+<text x="126" y="369.4" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">30m</text>
+<line x1="487.4" y1="166" x2="487.4" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="304.8" x2="676" y2="304.8" stroke="#e9eef2" stroke-width="1"/>
+<text x="487.4" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">2.0h</text>
+<text x="126" y="308.8" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">2.0h</text>
+<line x1="528.5" y1="166" x2="528.5" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="274.6" x2="676" y2="274.6" stroke="#e9eef2" stroke-width="1"/>
+<text x="528.5" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">4.0h</text>
+<text x="126" y="278.6" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">4.0h</text>
+<line x1="607.0" y1="166" x2="607.0" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="216.8" x2="676" y2="216.8" stroke="#e9eef2" stroke-width="1"/>
+<text x="607.0" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">15.0h</text>
+<text x="126" y="220.8" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">15.0h</text>
+<line x1="634.9" y1="166" x2="634.9" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="196.3" x2="676" y2="196.3" stroke="#e9eef2" stroke-width="1"/>
+<text x="634.9" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">24.0h</text>
+<text x="126" y="200.3" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">24.0h</text>
+<line x1="676.0" y1="166" x2="676.0" y2="562" stroke="#e9eef2" stroke-width="1"/>
+<line x1="138" y1="166.0" x2="676" y2="166.0" stroke="#e9eef2" stroke-width="1"/>
+<text x="676.0" y="588" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">2.0d</text>
+<text x="126" y="170.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">2.0d</text>
+<line x1="138" y1="562" x2="676" y2="166" stroke="#bcccdc" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="138" y="166" width="538" height="396" fill="none" stroke="#486581" stroke-width="1.4"/>
+<text x="407.0" y="610" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334e68">Human reference wait</text>
+<text transform="translate(88,364.0) rotate(-90)" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334e68">Model wait</text>
+<g><circle cx="162.1" cy="544.3" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#1 Explicit 30-second reminder | human=30s | model=30s | within_tol=True</title></g>
+<text x="170.1" y="536.3" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">1</text>
+<g><circle cx="186.1" cy="526.6" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#2 Urgent incident with explicit 45-second check | human=45s | model=45s | within_tol=True</title></g>
+<text x="194.1" y="518.6" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">2</text>
+<g><circle cx="339.9" cy="286.8" r="6.5" fill="#d97706" stroke="#ffffff" stroke-width="1.4"/><title>#3 Blocked clarification after 10 minutes | human=10m | model=3.0h | within_tol=False</title></g>
+<text x="347.9" y="278.8" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">3</text>
+<g><circle cx="405.1" cy="365.4" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#4 Driving home for 30 minutes | human=30m | model=30m | within_tol=True</title></g>
+<text x="413.1" y="357.4" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">4</text>
+<g><circle cx="528.5" cy="274.6" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#5 After-lunch daypart anchor | human=4.0h | model=4.0h | within_tol=True</title></g>
+<text x="536.5" y="266.6" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">5</text>
+<g><circle cx="607.0" cy="216.8" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#6 Tomorrow-morning follow-up | human=15.0h | model=15.0h | within_tol=True</title></g>
+<text x="615.0" y="208.8" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">6</text>
+<g><circle cx="657.3" cy="179.8" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#7 Tomorrow-evening vendor check | human=35.0h | model=35.0h | within_tol=True</title></g>
+<text x="665.3" y="171.8" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">7</text>
+<g><circle cx="381.0" cy="383.1" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#8 Attachment reminder in 20 minutes | human=20m | model=20m | within_tol=True</title></g>
+<text x="389.0" y="375.1" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">8</text>
+<g><circle cx="487.4" cy="304.8" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#9 Two-hour review window | human=2.0h | model=2.0h | within_tol=True</title></g>
+<text x="495.4" y="296.8" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">9</text>
+<g><circle cx="528.5" cy="274.6" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#10 Busy all afternoon | human=4.0h | model=4.0h | within_tol=True</title></g>
+<text x="536.5" y="266.6" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">10</text>
+<g><circle cx="487.4" cy="523.8" r="6.5" fill="#d97706" stroke="#ffffff" stroke-width="1.4"/><title>#11 Soft deep-work request | human=2.0h | model=48s | within_tol=False</title></g>
+<text x="495.4" y="515.8" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">11</text>
+<g><circle cx="634.9" cy="196.3" r="6.5" fill="#2f855a" stroke="#ffffff" stroke-width="1.4"/><title>#12 Supplier follow-up in one day | human=24.0h | model=24.0h | within_tol=True</title></g>
+<text x="642.9" y="188.3" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#102a43">12</text>
+<rect x="760" y="110" width="180" height="104" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="778" y="138" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Overall agreement</text>
+<text x="778" y="172" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#102a43">87.5%</text>
+<text x="778" y="198" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">16 manual cases</text>
+<rect x="960" y="110" width="180" height="104" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="978" y="138" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Follow-up within tol</text>
+<text x="978" y="172" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#102a43">83.3%</text>
+<text x="978" y="198" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">12 follow-up cases</text>
+<rect x="760" y="234" width="180" height="104" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="778" y="262" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Suppress agreement</text>
+<text x="778" y="296" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#102a43">100.0%</text>
+<text x="778" y="322" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">4 suppress cases</text>
+<rect x="960" y="234" width="180" height="104" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="978" y="262" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Follow-up MAE</text>
+<text x="978" y="296" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#102a43">24m</text>
+<text x="978" y="322" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">only cases with non-suppress predictions</text>
+<rect x="760" y="358" width="180" height="104" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="778" y="386" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Rank correlation</text>
+<text x="778" y="420" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#102a43">0.90</text>
+<text x="778" y="446" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">Spearman on follow-up cases</text>
+<rect x="960" y="358" width="180" height="104" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="978" y="386" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Follow-up detected</text>
+<text x="978" y="420" font-family="Segoe UI, Arial, sans-serif" font-size="26" font-weight="700" fill="#102a43">100.0%</text>
+<text x="978" y="446" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">human follow-up cases kept alive</text>
+<text x="760" y="484" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600" fill="#102a43">Suppress confusion matrix</text>
+<text x="904" y="458" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">Model</text>
+<text x="720" y="574" transform="rotate(-90 720,574)" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">Human</text>
+<text x="815.0" y="494" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">follow-up</text>
+<text x="748" y="544.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">follow-up</text>
+<rect x="760" y="502" width="100" height="66" rx="12" fill="#e8f5ee" stroke="#d9e2ec" stroke-width="1"/>
+<text x="810.0" y="544.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#102a43">12</text>
+<text x="925.0" y="494" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">suppress</text>
+<rect x="870" y="502" width="100" height="66" rx="12" fill="#fff4db" stroke="#d9e2ec" stroke-width="1"/>
+<text x="920.0" y="544.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#102a43">0</text>
+<text x="748" y="620.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">suppress</text>
+<rect x="760" y="578" width="100" height="66" rx="12" fill="#fde8e8" stroke="#d9e2ec" stroke-width="1"/>
+<text x="810.0" y="620.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#102a43">0</text>
+<rect x="870" y="578" width="100" height="66" rx="12" fill="#e6fffa" stroke="#d9e2ec" stroke-width="1"/>
+<text x="920.0" y="620.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#102a43">4</text>
+<text x="60" y="632" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600" fill="#102a43">Category mean absolute error</text>
+<text x="60" y="665" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">async_long</text>
+<rect x="260" y="650" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="650" width="0.0" height="20" rx="10" fill="#2b6cb0"/>
+<text x="274.0" y="665" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">0s</text>
+<text x="60" y="693" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">blocked_followup</text>
+<rect x="260" y="678" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="678" width="720.0" height="20" rx="10" fill="#2b6cb0"/>
+<text x="994.0" y="693" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">2.9h</text>
+<text x="60" y="721" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">daypart_anchor</text>
+<rect x="260" y="706" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="706" width="0.0" height="20" rx="10" fill="#2b6cb0"/>
+<text x="274.0" y="721" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">0s</text>
+<text x="60" y="749" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">explicit_long</text>
+<rect x="260" y="734" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="734" width="0.0" height="20" rx="10" fill="#2b6cb0"/>
+<text x="274.0" y="749" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">0s</text>
+<text x="60" y="777" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">explicit_medium</text>
+<rect x="260" y="762" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="762" width="0.0" height="20" rx="10" fill="#2b6cb0"/>
+<text x="274.0" y="777" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">0s</text>
+<text x="60" y="805" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">explicit_short</text>
+<rect x="260" y="790" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="790" width="0.0" height="20" rx="10" fill="#2b6cb0"/>
+<text x="274.0" y="805" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">0s</text>
+<text x="60" y="833" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">soft_busy_daypart</text>
+<rect x="260" y="818" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="818" width="0.0" height="20" rx="10" fill="#2b6cb0"/>
+<text x="274.0" y="833" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">0s</text>
+<text x="60" y="861" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">soft_busy_open</text>
+<rect x="260" y="846" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="846" width="501.3" height="20" rx="10" fill="#2b6cb0"/>
+<text x="775.3" y="861" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">2.0h</text>
+<text x="60" y="889" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">urgent_short</text>
+<rect x="260" y="874" width="720" height="20" rx="10" fill="#f0f4f8"/>
+<rect x="260" y="874" width="0.0" height="20" rx="10" fill="#2b6cb0"/>
+<text x="274.0" y="889" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#102a43">0s</text>
+</svg>

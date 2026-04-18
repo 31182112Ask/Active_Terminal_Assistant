@@ -2,57 +2,54 @@
 
 Active Terminal Assistant is a local Ollama chat CLI with a learned wait-policy model for proactive follow-up timing.
 
-This repository contains:
+The core question is:
 
-- `ollama_wait_cli.py`: minimal multi-turn CLI built on `ollama serve`
-- `wait_model.py`: lightweight wait-policy model, feature extraction, bundle loading, and prediction
-- `run_training.py`: synthetic data generation, training, benchmark, and artifact export
+After the assistant has already spoken, and if the user stays silent from now on, when should the assistant speak again?
+
+This repository keeps that timing policy local, lightweight, and deployable. The delay predictor is not an LLM.
+
+## Repository Contents
+
+- `ollama_wait_cli.py`: minimal multi-turn Ollama CLI using `gemma4:e4b`
+- `wait_model.py`: lightweight wait-policy model, features, guardrails, and bundle loading
+- `run_training.py`: synthetic-data training and benchmark pipeline
+- `human_reference_benchmark.py`: manual human-reference benchmark and chart generation
+- `human_reference_cases.json`: dialogue-history cases with human-reference wait labels
 - `main.ipynb`: notebook entry point for training and export
-- `artifacts/`: trained weights, benchmark metrics, benchmark report, and context showcase
-- `smoke_test_ollama_wait_cli.py`: end-to-end smoke test for CLI startup, chat, wait prediction, and process shutdown
-
-## What The Model Does
-
-The prediction model solves this task:
-
-Given the current dialogue context after the assistant has already spoken, and assuming the user remains silent from now on, predict when the assistant should proactively speak again.
-
-The model does not use an LLM for this decision. It is a lightweight neural model trained on structured dialogue data with explicit time-awareness and suppression logic.
+- `smoke_test_ollama_wait_cli.py`: end-to-end CLI smoke test
+- `artifacts/`: trained weights, benchmark metrics, reports, and generated charts
 
 ## Current Stack
 
-- LLM runtime: Ollama
+- Runtime: Ollama
 - Chat model: `gemma4:e4b`
-- Wait-policy model: local PyTorch model bundle in `artifacts/wait_policy_bundle.pt`
-- CLI mode: multi-turn terminal chat
+- Wait-policy model: `artifacts/wait_policy_bundle.pt`
 - Thinking mode: disabled by default through Ollama `think: false`
+- Device selection: the wait-policy model uses CUDA automatically when available
 
 ## Project Layout
 
 ```text
 .
-├─ artifacts/
-│  ├─ benchmark_report.md
-│  ├─ context_showcase.md
-│  ├─ metrics.json
-│  ├─ prediction_preview.json
-│  ├─ wait_policy_bundle.pt
-│  └─ wait_policy_state.pt
-├─ main.ipynb
-├─ ollama_wait_cli.py
-├─ run_training.py
-├─ smoke_test_ollama_wait_cli.py
-└─ wait_model.py
+|- artifacts/
+|  |- benchmark_report.md
+|  |- context_showcase.md
+|  |- human_reference_benchmark.json
+|  |- human_reference_benchmark.md
+|  |- human_reference_comparison.svg
+|  |- metrics.json
+|  |- prediction_preview.json
+|  |- wait_policy_bundle.pt
+|  `- wait_policy_state.pt
+|- human_reference_benchmark.py
+|- human_reference_cases.json
+|- main.ipynb
+|- ollama_wait_cli.py
+|- requirements.txt
+|- run_training.py
+|- smoke_test_ollama_wait_cli.py
+`- wait_model.py
 ```
-
-## Requirements
-
-- Windows PowerShell
-- Python 3.12
-- Ollama installed locally
-- `gemma4:e4b` already pulled in Ollama
-- NVIDIA GPU optional
-  - the wait-policy model will use CUDA automatically if PyTorch with CUDA is installed
 
 ## Install
 
@@ -69,7 +66,7 @@ Install dependencies:
 python -m pip install -r requirements.txt
 ```
 
-For CUDA on Windows with NVIDIA GPU, install the matching PyTorch build. Example for CUDA 12.8:
+For NVIDIA GPU on Windows, install the matching CUDA build of PyTorch. Example for CUDA 12.8:
 
 ```powershell
 python -m pip install --upgrade --force-reinstall torch==2.11.0+cu128 --index-url https://download.pytorch.org/whl/cu128
@@ -83,26 +80,21 @@ Start the local chat CLI:
 python ollama_wait_cli.py
 ```
 
-What it does:
+The CLI will:
 
-- starts a dedicated `ollama serve` process on a local port
-- chats with `gemma4:e4b`
-- runs the wait-policy model after each assistant reply
-- prints the recommended proactive wait time if the user stays silent
-- kills the spawned Ollama process on exit
+- spawn a dedicated `ollama serve` process on a local port
+- run multi-turn chat with `gemma4:e4b`
+- run the wait-policy model after each assistant turn
+- print the recommended next proactive delay if the user stays silent
+- fully kill the spawned Ollama process on exit
 
-Optional flags:
+Useful flags:
 
 ```powershell
 python ollama_wait_cli.py --device cuda
 python ollama_wait_cli.py --think
 python ollama_wait_cli.py --model gemma4:e4b
 ```
-
-Notes:
-
-- `--think` enables Ollama thinking mode. Default is off.
-- if you omit `--device`, the wait-policy model uses `cuda` when available, otherwise `cpu`
 
 ## Train Or Rebuild The Model
 
@@ -112,7 +104,7 @@ Run the training pipeline:
 python run_training.py
 ```
 
-Or open and execute:
+Or execute the notebook:
 
 ```text
 main.ipynb
@@ -120,39 +112,87 @@ main.ipynb
 
 Training outputs are written into `artifacts/`.
 
-## Benchmark Outputs
+## Human-Reference Benchmark
 
-Main benchmark artifacts:
+This repository now includes a manual human-reference benchmark across different dialogue histories.
+
+What it measures:
+
+- explicit second-level reminders
+- urgent incident follow-ups
+- blocked clarification cases
+- medium and long async follow-ups
+- daypart anchors such as `after lunch` and `tomorrow morning`
+- soft busy/space-seeking contexts
+- explicit suppress / do-not-contact closes
+
+Important:
+
+- these labels are manually assigned human-reference delays
+- this is a single-rater benchmark, not production telemetry
+- it is useful for checking practical alignment, especially on edge cases the synthetic benchmark can hide
+
+Run it with:
+
+```powershell
+python human_reference_benchmark.py
+```
+
+Latest benchmark snapshot:
+
+- total cases: `16`
+- follow-up cases: `12`
+- suppress cases: `4`
+- overall within-tolerance rate: `87.5%`
+- follow-up within-tolerance rate: `83.3%`
+- suppress agreement rate: `100.0%`
+- follow-up detection rate: `100.0%`
+- follow-up MAE: `1452s`
+- follow-up Spearman rank correlation: `0.90`
+
+The largest observed misses in the current snapshot are:
+
+- blocked clarification after 10 minutes: model predicted about `3.0h`
+- soft deep-work request: human reference `2.0h`, model predicted `48s`
+
+### Human vs Model Comparison
+
+![Human reference comparison](artifacts/human_reference_comparison.svg)
+
+Detailed outputs:
+
+- `artifacts/human_reference_benchmark.md`
+- `artifacts/human_reference_benchmark.json`
+- `artifacts/human_reference_comparison.svg`
+
+## Existing Model Artifacts
+
+Main generated artifacts:
 
 - `artifacts/metrics.json`
 - `artifacts/benchmark_report.md`
 - `artifacts/context_showcase.md`
-
-These files record:
-
-- acceptance metrics
-- practical-score style evaluation
-- stress and lexical checks
-- representative context-level prediction examples
+- `artifacts/wait_policy_bundle.pt`
+- `artifacts/wait_policy_state.pt`
 
 ## Test
 
-Run the end-to-end smoke test:
+Run the CLI smoke test:
 
 ```powershell
 python smoke_test_ollama_wait_cli.py
 ```
 
-The smoke test verifies:
+This verifies:
 
 - Ollama server startup
 - one real chat roundtrip
 - wait-policy inference
-- clean process shutdown
+- full server shutdown on exit
 - port release after exit
 
 ## Notes
 
-- The wait-policy benchmark is currently based mainly on synthetic data.
-- The benchmark is useful for iteration, but real annotated dialogue data would be a stronger validation set.
-- Model artifacts are included in this repository so the CLI can run directly without retraining.
+- The synthetic benchmark is still useful for iteration speed.
+- The new human-reference benchmark exists to expose cases where synthetic generation can overstate quality.
+- Model artifacts are committed so the CLI can run without retraining first.

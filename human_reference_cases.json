@@ -1,0 +1,354 @@
+[
+  {
+    "id": "case_01_explicit_30s",
+    "title": "Explicit 30-second reminder",
+    "category": "explicit_short",
+    "hour_local": 10,
+    "weekday": 1,
+    "language": "en",
+    "human_wait_seconds": 30.0,
+    "human_suppress": false,
+    "tolerance_seconds": 10.0,
+    "rationale": "The user sets an exact second-level reminder, so a human would wait exactly that long.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "If I go quiet, ping me again in 30 seconds."
+      },
+      {
+        "role": "assistant",
+        "text": "Okay. If you stay silent, I will ping you again in 30 seconds."
+      }
+    ]
+  },
+  {
+    "id": "case_02_urgent_45s",
+    "title": "Urgent incident with explicit 45-second check",
+    "category": "urgent_short",
+    "hour_local": 11,
+    "weekday": 1,
+    "language": "en",
+    "human_wait_seconds": 45.0,
+    "human_suppress": false,
+    "tolerance_seconds": 15.0,
+    "rationale": "This is an urgent production context and the assistant already committed to a short check-back window.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Prod is still down after the last restart."
+      },
+      {
+        "role": "assistant",
+        "text": "Keep watching the queue. If I still do not hear from you, I will check back in 45 seconds."
+      }
+    ]
+  },
+  {
+    "id": "case_03_clarification_10m",
+    "title": "Blocked clarification after 10 minutes",
+    "category": "blocked_followup",
+    "hour_local": 9,
+    "weekday": 2,
+    "language": "en",
+    "human_wait_seconds": 600.0,
+    "human_suppress": false,
+    "tolerance_seconds": 60.0,
+    "rationale": "A human operator would keep the thread alive because progress is blocked, but without becoming too aggressive.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I still owe you the missing field name."
+      },
+      {
+        "role": "assistant",
+        "text": "If I do not hear back, I will ask again in 10 minutes so we can unblock the draft."
+      }
+    ]
+  },
+  {
+    "id": "case_04_commute_30m",
+    "title": "Driving home for 30 minutes",
+    "category": "explicit_medium",
+    "hour_local": 18,
+    "weekday": 2,
+    "language": "en",
+    "human_wait_seconds": 1800.0,
+    "human_suppress": false,
+    "tolerance_seconds": 180.0,
+    "rationale": "The user gives a concrete availability window, so the next proactive turn should wait until that window closes.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I am driving home for 30 minutes. If the invoice is still pending, ping me after that."
+      },
+      {
+        "role": "assistant",
+        "text": "Understood. I will leave you alone for 30 minutes and then check back if it is still pending."
+      }
+    ]
+  },
+  {
+    "id": "case_05_after_lunch",
+    "title": "After-lunch daypart anchor",
+    "category": "daypart_anchor",
+    "hour_local": 10,
+    "weekday": 2,
+    "language": "en",
+    "human_wait_seconds": 14400.0,
+    "human_suppress": false,
+    "tolerance_seconds": 1800.0,
+    "rationale": "A human would not interrupt before the requested daypart arrives.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "If the PRD is still missing after lunch, follow up."
+      },
+      {
+        "role": "assistant",
+        "text": "Okay. I will check back after lunch if it is still missing."
+      }
+    ]
+  },
+  {
+    "id": "case_06_tomorrow_morning",
+    "title": "Tomorrow-morning follow-up",
+    "category": "daypart_anchor",
+    "hour_local": 18,
+    "weekday": 2,
+    "language": "en",
+    "human_wait_seconds": 54000.0,
+    "human_suppress": false,
+    "tolerance_seconds": 3600.0,
+    "rationale": "The user gives an explicit next-morning boundary, so the human reference waits until that point.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "If I still have not sent the deck by tomorrow morning, follow up."
+      },
+      {
+        "role": "assistant",
+        "text": "Understood. I will check back tomorrow morning if it is still missing."
+      }
+    ]
+  },
+  {
+    "id": "case_07_tomorrow_evening",
+    "title": "Tomorrow-evening vendor check",
+    "category": "daypart_anchor",
+    "hour_local": 9,
+    "weekday": 3,
+    "language": "en",
+    "human_wait_seconds": 126000.0,
+    "human_suppress": false,
+    "tolerance_seconds": 10800.0,
+    "rationale": "The user names a specific future daypart, so a human would wait until that deadline instead of checking early.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "If the vendor still has not replied by tomorrow evening, follow up."
+      },
+      {
+        "role": "assistant",
+        "text": "Okay. I will check again tomorrow evening if there is still no reply."
+      }
+    ]
+  },
+  {
+    "id": "case_08_attachment_20m",
+    "title": "Attachment reminder in 20 minutes",
+    "category": "explicit_medium",
+    "hour_local": 14,
+    "weekday": 1,
+    "language": "en",
+    "human_wait_seconds": 1200.0,
+    "human_suppress": false,
+    "tolerance_seconds": 120.0,
+    "rationale": "The delay is explicit and short enough that a human would follow it closely.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I still need to attach the screenshot. If I disappear, ask again in 20 minutes."
+      },
+      {
+        "role": "assistant",
+        "text": "Got it. I will ask again in 20 minutes if I have not heard from you."
+      }
+    ]
+  },
+  {
+    "id": "case_09_review_2h",
+    "title": "Two-hour review window",
+    "category": "explicit_long",
+    "hour_local": 13,
+    "weekday": 0,
+    "language": "en",
+    "human_wait_seconds": 7200.0,
+    "human_suppress": false,
+    "tolerance_seconds": 1800.0,
+    "rationale": "The user gives a concrete two-hour review window, so a human would avoid checking back early.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I am heads-down on this review for 2 hours."
+      },
+      {
+        "role": "assistant",
+        "text": "Okay. I will circle back in 2 hours if it is still pending."
+      }
+    ]
+  },
+  {
+    "id": "case_10_meetings_afternoon",
+    "title": "Busy all afternoon",
+    "category": "soft_busy_daypart",
+    "hour_local": 11,
+    "weekday": 3,
+    "language": "en",
+    "human_wait_seconds": 14400.0,
+    "human_suppress": false,
+    "tolerance_seconds": 3600.0,
+    "rationale": "A human reading this context would usually defer until the afternoon meeting block is over.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I am in back-to-back meetings this afternoon."
+      },
+      {
+        "role": "assistant",
+        "text": "Understood. I will follow up later this afternoon if the decision is still blocked."
+      }
+    ]
+  },
+  {
+    "id": "case_11_deep_work_soft",
+    "title": "Soft deep-work request",
+    "category": "soft_busy_open",
+    "hour_local": 13,
+    "weekday": 4,
+    "language": "en",
+    "human_wait_seconds": 7200.0,
+    "human_suppress": false,
+    "tolerance_seconds": 3600.0,
+    "rationale": "Even without a numeric delay, a human would usually infer that a couple of hours of space is appropriate.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I need a couple of hours of heads-down time."
+      },
+      {
+        "role": "assistant",
+        "text": "No problem. I will give you room and circle back later if it is still pending."
+      }
+    ]
+  },
+  {
+    "id": "case_12_supplier_1d",
+    "title": "Supplier follow-up in one day",
+    "category": "async_long",
+    "hour_local": 15,
+    "weekday": 1,
+    "language": "en",
+    "human_wait_seconds": 86400.0,
+    "human_suppress": false,
+    "tolerance_seconds": 7200.0,
+    "rationale": "External async dependencies usually deserve a long wait before a proactive nudge.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "The supplier still has not replied."
+      },
+      {
+        "role": "assistant",
+        "text": "If it is still quiet in 1 day, I will follow up again."
+      }
+    ]
+  },
+  {
+    "id": "case_13_need_space",
+    "title": "Need space",
+    "category": "suppress_space",
+    "hour_local": 20,
+    "weekday": 5,
+    "language": "en",
+    "human_wait_seconds": null,
+    "human_suppress": true,
+    "tolerance_seconds": 0.0,
+    "rationale": "A human should not proactively interrupt after the user explicitly asks for space.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I am overwhelmed and need some space."
+      },
+      {
+        "role": "assistant",
+        "text": "Understood. I will wait for you to restart the conversation."
+      }
+    ]
+  },
+  {
+    "id": "case_14_do_not_ping_tonight",
+    "title": "Do not ping again tonight",
+    "category": "suppress_dnd",
+    "hour_local": 21,
+    "weekday": 4,
+    "language": "en",
+    "human_wait_seconds": null,
+    "human_suppress": true,
+    "tolerance_seconds": 0.0,
+    "rationale": "The user gives an explicit do-not-contact instruction for the rest of the night.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I am going to sleep. Do not ping me again tonight."
+      },
+      {
+        "role": "assistant",
+        "text": "Understood. I will leave it here for tonight."
+      }
+    ]
+  },
+  {
+    "id": "case_15_clean_close",
+    "title": "Clean conversation close",
+    "category": "suppress_close",
+    "hour_local": 17,
+    "weekday": 1,
+    "language": "en",
+    "human_wait_seconds": null,
+    "human_suppress": true,
+    "tolerance_seconds": 0.0,
+    "rationale": "The thread is finished and should not trigger another proactive turn.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Perfect, that is all."
+      },
+      {
+        "role": "assistant",
+        "text": "Glad it helped. I will leave it here."
+      }
+    ]
+  },
+  {
+    "id": "case_16_no_followup_unless_asked",
+    "title": "No follow-up unless asked",
+    "category": "suppress_dnd",
+    "hour_local": 16,
+    "weekday": 0,
+    "language": "en",
+    "human_wait_seconds": null,
+    "human_suppress": true,
+    "tolerance_seconds": 0.0,
+    "rationale": "The user explicitly forbids proactive outreach unless they restart the thread.",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Thanks. No need to follow up unless I ask."
+      },
+      {
+        "role": "assistant",
+        "text": "Okay. I will stay quiet unless you come back."
+      }
+    ]
+  }
+]
