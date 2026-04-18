@@ -1,0 +1,52 @@
+{
+  "source": {
+    "channel": "ubuntu",
+    "dates": [
+      "2026-02-04",
+      "2026-02-05",
+      "2026-02-06"
+    ],
+    "logs": [
+      {
+        "date": "2026-02-04",
+        "url": "https://irclogs.ubuntu.com/2026/02/04/%23ubuntu.html",
+        "status": "ok",
+        "rows": "200"
+      },
+      {
+        "date": "2026-02-05",
+        "url": "https://irclogs.ubuntu.com/2026/02/05/%23ubuntu.html",
+        "status": "ok",
+        "rows": "93"
+      },
+      {
+        "date": "2026-02-06",
+        "url": "https://irclogs.ubuntu.com/2026/02/06/%23ubuntu.html",
+        "status": "ok",
+        "rows": "84"
+      }
+    ],
+    "observation_window_minutes": 360,
+    "burst_merge_minutes": 2,
+    "context_turn_limit": 8
+  },
+  "summary": {
+    "total_cases": 164,
+    "followup_cases": 113,
+    "suppress_cases": 51,
+    "overall_within_tolerance_rate": 0.17073170731707318,
+    "followup_within_tolerance_rate": 0.22123893805309736,
+    "suppress_agreement_rate": 0.058823529411764705,
+    "followup_detection_rate": 0.9823008849557522,
+    "followup_mae_seconds": 1673.855855855856,
+    "followup_median_abs_error_seconds": 274.0,
+    "followup_spearman": 0.06611157961985503,
+    "confusion": {
+      "human_followup_model_followup": 111,
+      "human_followup_model_suppress": 2,
+      "human_suppress_model_followup": 48,
+      "human_suppress_model_suppress": 3
+    }
+  },
+  "device": "cuda"
+}

@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900">
+<rect width="100%" height="100%" fill="#fcfcf8"/>
+<text x="60" y="58" font-family="Segoe UI, Arial, sans-serif" font-size="29" font-weight="700" fill="#1f2933">Ubuntu IRC Human Behavior Benchmark</text>
+<text x="60" y="87" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#52606d">Real multi-party dialogue delays from official Ubuntu IRC logs. Dates: 2026-02-04, 2026-02-05, 2026-02-06. Observation window: 360 minutes. Minute-resolution public timestamps.</text>
+<rect x="70" y="114" width="710" height="648" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.4" rx="16"/>
+<line x1="90.0" y1="140" x2="90.0" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="730.0" x2="760" y2="730.0" stroke="#e9eef2" stroke-width="1"/>
+<text x="90.0" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">60s</text>
+<text x="80" y="734.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">60s</text>
+<line x1="238.3" y1="140" x2="238.3" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="599.4" x2="760" y2="599.4" stroke="#e9eef2" stroke-width="1"/>
+<text x="238.3" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">5m</text>
+<text x="80" y="603.4" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">5m</text>
+<line x1="339.5" y1="140" x2="339.5" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="510.3" x2="760" y2="510.3" stroke="#e9eef2" stroke-width="1"/>
+<text x="339.5" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">15m</text>
+<text x="80" y="514.3" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">15m</text>
+<line x1="403.3" y1="140" x2="403.3" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="454.1" x2="760" y2="454.1" stroke="#e9eef2" stroke-width="1"/>
+<text x="403.3" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">30m</text>
+<text x="80" y="458.1" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">30m</text>
+<line x1="467.2" y1="140" x2="467.2" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="397.8" x2="760" y2="397.8" stroke="#e9eef2" stroke-width="1"/>
+<text x="467.2" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">60m</text>
+<text x="80" y="401.8" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">60m</text>
+<line x1="531.1" y1="140" x2="531.1" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="341.6" x2="760" y2="341.6" stroke="#e9eef2" stroke-width="1"/>
+<text x="531.1" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">2.0h</text>
+<text x="80" y="345.6" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">2.0h</text>
+<line x1="632.3" y1="140" x2="632.3" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="252.5" x2="760" y2="252.5" stroke="#e9eef2" stroke-width="1"/>
+<text x="632.3" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">6.0h</text>
+<text x="80" y="256.5" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">6.0h</text>
+<line x1="696.1" y1="140" x2="696.1" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="196.2" x2="760" y2="196.2" stroke="#e9eef2" stroke-width="1"/>
+<text x="696.1" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">12.0h</text>
+<text x="80" y="200.2" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">12.0h</text>
+<line x1="760.0" y1="140" x2="760.0" y2="730" stroke="#e9eef2" stroke-width="1"/>
+<line x1="90" y1="140.0" x2="760" y2="140.0" stroke="#e9eef2" stroke-width="1"/>
+<text x="760.0" y="760" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">24.0h</text>
+<text x="80" y="144.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">24.0h</text>
+<line x1="90" y1="730" x2="760" y2="140" stroke="#bcccdc" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="90" y="140" width="670" height="590" fill="none" stroke="#486581" stroke-width="1.4"/>
+<text x="425.0" y="784" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334e68">Actual human next-turn delay</text>
+<text transform="translate(38,435.0) rotate(-90)" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334e68">Model predicted delay</text>
+<g><circle cx="90.0" cy="690.2" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T14:17 | gordonjcp | human=0s | model=2m | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:49 | osse | human=0s | model=14s | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T13:05 | TomyWork | human=0s | model=33s | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:48 | sneakyimp | human=60s | model=13s | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:52 | Abel | human=60s | model=33s | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:54 | JanC | human=60s | model=22s | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:57 | Abel | human=60s | model=28s | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T14:34 | leftyfb | human=60s | model=39s | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T13:04 | TomyWork | human=60s | model=50s | within_tol=True</title></g>
+<g><circle cx="90.0" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T13:04 | Ox7C5 | human=60s | model=37s | within_tol=True</title></g>
+<g><circle cx="153.9" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:49 | tomreyn | human=2m | model=25s | within_tol=True</title></g>
+<g><circle cx="153.9" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:59 | tomreyn | human=2m | model=18s | within_tol=True</title></g>
+<g><circle cx="153.9" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:55 | JanC | human=2m | model=21s | within_tol=True</title></g>
+<g><circle cx="153.9" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T19:18 | Guest8892 | human=2m | model=25s | within_tol=True</title></g>
+<g><circle cx="153.9" cy="730.0" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T19:19 | bprompt | human=2m | model=53s | within_tol=True</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T08:45 | osse | human=3m | model=25s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T08:46 | tomreyn | human=3m | model=14s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T08:49 | tomreyn | human=3m | model=17s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T08:57 | tomreyn | human=3m | model=22s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="685.4" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T14:10 | ogra | human=3m | model=2m | within_tol=True</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:46 | tomreyn | human=3m | model=52s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:46 | osse | human=3m | model=14s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T22:45 | tomreyn | human=3m | model=24s | within_tol=False</title></g>
+<g><path d="M 185.2,152.0 L 197.2,164.0 M 197.2,152.0 L 185.2,164.0" stroke="#d64545" stroke-width="2.2"/><title>2026-02-04T23:17 | tomreyn | human=3m | model=suppress | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:50 | JanC | human=3m | model=32s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T00:08 | Abel | human=3m | model=31s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T02:04 | sem | human=3m | model=32s | within_tol=False</title></g>
+<g><circle cx="191.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T16:18 | lotuspsychje | human=3m | model=38s | within_tol=False</title></g>
+<g><circle cx="217.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T02:44 | ananke | human=4m | model=38s | within_tol=False</title></g>
+<g><circle cx="217.7" cy="341.6" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:09 | hansolefsen2012 | human=4m | model=2.0h | within_tol=False</title></g>
+<g><circle cx="217.7" cy="341.6" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:13 | hansolefsen2012 | human=4m | model=2.0h | within_tol=False</title></g>
+<g><circle cx="217.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T18:24 | lotuspsychje | human=4m | model=39s | within_tol=False</title></g>
+<g><circle cx="217.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T18:35 | JanC | human=4m | model=20s | within_tol=False</title></g>
+<g><circle cx="217.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T20:28 | sem | human=4m | model=18s | within_tol=False</title></g>
+<g><circle cx="217.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T16:10 | lotuspsychje | human=4m | model=34s | within_tol=False</title></g>
+<g><circle cx="217.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T16:14 | lotuspsychje | human=4m | model=37s | within_tol=False</title></g>
+<g><circle cx="238.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T08:52 | tomreyn | human=5m | model=36s | within_tol=False</title></g>
+<g><circle cx="238.3" cy="341.6" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:12 | tomreyn | human=5m | model=2.0h | within_tol=False</title></g>
+<g><circle cx="238.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T22:01 | tomreyn | human=5m | model=26s | within_tol=False</title></g>
+<g><circle cx="238.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T02:03 | rfm | human=5m | model=38s | within_tol=False</title></g>
+<g><circle cx="238.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T16:21 | SuperLag | human=5m | model=43s | within_tol=False</title></g>
+<g><circle cx="255.1" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:58 | Abel | human=6m | model=23s | within_tol=False</title></g>
+<g><circle cx="255.1" cy="723.5" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T20:33 | bprompt | human=6m | model=65s | within_tol=False</title></g>
+<g><circle cx="269.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T08:58 | osse | human=7m | model=18s | within_tol=False</title></g>
+<g><circle cx="269.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:00 | hansolefsen2012 | human=7m | model=24s | within_tol=False</title></g>
+<g><circle cx="269.3" cy="686.2" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:41 | sneakyimp | human=7m | model=2m | within_tol=False</title></g>
+<g><circle cx="269.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:58 | tomreyn | human=7m | model=37s | within_tol=False</title></g>
+<g><circle cx="269.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T19:54 | Tingo | human=7m | model=29s | within_tol=False</title></g>
+<g><circle cx="281.6" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:01 | hansolefsen2012 | human=8m | model=15s | within_tol=False</title></g>
+<g><circle cx="281.6" cy="721.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:51 | tomreyn | human=8m | model=67s | within_tol=False</title></g>
+<g><circle cx="292.4" cy="713.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T19:20 | Guest8892 | human=9m | model=74s | within_tol=False</title></g>
+<g><circle cx="292.4" cy="723.5" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T19:29 | Guest8892 | human=9m | model=65s | within_tol=False</title></g>
+<g><circle cx="292.4" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T16:12 | SuperLag | human=9m | model=39s | within_tol=False</title></g>
+<g><circle cx="302.1" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:07 | hansolefsen2012 | human=10m | model=25s | within_tol=False</title></g>
+<g><circle cx="302.1" cy="341.6" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:30 | tomreyn | human=10m | model=2.0h | within_tol=False</title></g>
+<g><circle cx="302.1" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:49 | sneakyimp | human=10m | model=36s | within_tol=False</title></g>
+<g><circle cx="310.9" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:05 | osse | human=11m | model=19s | within_tol=False</title></g>
+<g><circle cx="326.3" cy="341.6" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:17 | tomreyn | human=13m | model=2.0h | within_tol=False</title></g>
+<g><circle cx="326.3" cy="341.6" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:20 | hansolefsen2012 | human=13m | model=2.0h | within_tol=False</title></g>
+<g><circle cx="339.5" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:58 | JanC | human=15m | model=25s | within_tol=False</title></g>
+<g><circle cx="356.3" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T21:59 | sneakyimp | human=18m | model=26s | within_tol=False</title></g>
+<g><circle cx="378.9" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:16 | osse | human=23m | model=31s | within_tol=False</title></g>
+<g><circle cx="397.0" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T22:42 | sneakyimp | human=28m | model=18s | within_tol=False</title></g>
+<g><circle cx="397.0" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T19:21 | bprompt | human=28m | model=37s | within_tol=False</title></g>
+<g><circle cx="400.2" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T22:48 | tomreyn | human=29m | model=23s | within_tol=False</title></g>
+<g><circle cx="422.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T23:20 | tomreyn | human=37m | model=34s | within_tol=False</title></g>
+<g><circle cx="438.6" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-05T18:33 | bprompt | human=44m | model=22s | within_tol=False</title></g>
+<g><circle cx="505.6" cy="341.6" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T10:01 | tomreyn | human=1.5h | model=2.0h | within_tol=True</title></g>
+<g><circle cx="510.5" cy="341.6" r="5.8" fill="#2f855a" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-04T09:22 | lazysundaydreams | human=1.6h | model=2.0h | within_tol=True</title></g>
+<g><circle cx="611.1" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T13:07 | tomreyn | human=4.8h | model=40s | within_tol=False</title></g>
+<g><circle cx="611.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T13:05 | tomreyn | human=4.8h | model=26s | within_tol=False</title></g>
+<g><circle cx="630.7" cy="730.0" r="5.8" fill="#d97706" stroke="#ffffff" stroke-width="1.2"/><title>2026-02-06T16:26 | SuperLag | human=5.9h | model=37s | within_tol=False</title></g>
+<rect x="820" y="140" width="180" height="105" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="836" y="168" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Overall agreement</text>
+<text x="836" y="202" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" fill="#102a43">17.1%</text>
+<text x="836" y="227" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">164 real samples</text>
+<rect x="1020" y="140" width="180" height="105" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="1036" y="168" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Follow-up within tol</text>
+<text x="1036" y="202" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" fill="#102a43">22.1%</text>
+<text x="1036" y="227" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">113 follow-up cases</text>
+<rect x="820" y="266" width="180" height="105" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="836" y="294" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Suppress agreement</text>
+<text x="836" y="328" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" fill="#102a43">5.9%</text>
+<text x="836" y="353" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">51 suppress cases</text>
+<rect x="1020" y="266" width="180" height="105" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="1036" y="294" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Follow-up MAE</text>
+<text x="1036" y="328" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" fill="#102a43">28m</text>
+<text x="1036" y="353" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">real human delay vs model</text>
+<rect x="820" y="392" width="180" height="105" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="836" y="420" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Rank correlation</text>
+<text x="836" y="454" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" fill="#102a43">0.07</text>
+<text x="836" y="479" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">Spearman on follow-up cases</text>
+<rect x="1020" y="392" width="180" height="105" rx="14" fill="#ffffff" stroke="#d9e2ec" stroke-width="1.2"/>
+<text x="1036" y="420" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#52606d">Follow-up detected</text>
+<text x="1036" y="454" font-family="Segoe UI, Arial, sans-serif" font-size="25" font-weight="700" fill="#102a43">98.2%</text>
+<text x="1036" y="479" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#7b8794">human follow-up cases not suppressed</text>
+<text x="820" y="532" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600" fill="#102a43">Suppress confusion matrix</text>
+<text x="940" y="508" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">Model</text>
+<text x="778" y="636" transform="rotate(-90 778,636)" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">Human</text>
+<text x="881.0" y="540" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">follow-up</text>
+<text x="808" y="597.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">follow-up</text>
+<rect x="820" y="550" width="122" height="76" rx="12" fill="#e8f5ee" stroke="#d9e2ec" stroke-width="1"/>
+<text x="881.0" y="598.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#102a43">111</text>
+<text x="1013.0" y="540" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">suppress</text>
+<rect x="952" y="550" width="122" height="76" rx="12" fill="#fff4db" stroke="#d9e2ec" stroke-width="1"/>
+<text x="1013.0" y="598.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#102a43">2</text>
+<text x="808" y="683.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#52606d">suppress</text>
+<rect x="820" y="636" width="122" height="76" rx="12" fill="#fde8e8" stroke="#d9e2ec" stroke-width="1"/>
+<text x="881.0" y="684.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#102a43">48</text>
+<rect x="952" y="636" width="122" height="76" rx="12" fill="#e6fffa" stroke="#d9e2ec" stroke-width="1"/>
+<text x="1013.0" y="684.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700" fill="#102a43">3</text>
+<text x="60" y="790" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="600" fill="#102a43">Largest misses</text>
+<text x="60" y="828.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">1. 2026-02-06T16:26 | SuperLag | human=5.9h | model=37s | error=5.9h</text>
+<text x="60" y="846.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">2. 2026-02-04T18:41 | JanC | human=5.2h | model=25s | error=5.1h</text>
+<text x="60" y="864.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">3. 2026-02-06T13:05 | tomreyn | human=4.8h | model=26s | error=4.8h</text>
+<text x="60" y="882.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">4. 2026-02-06T13:07 | tomreyn | human=4.8h | model=40s | error=4.8h</text>
+<text x="60" y="900.0" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#334e68">5. 2026-02-04T14:17 | TomyWork | human=2.0h | model=36s | error=2.0h</text>
+</svg>

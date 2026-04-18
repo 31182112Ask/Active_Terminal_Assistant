@@ -165,6 +165,65 @@ Detailed outputs:
 - `artifacts/human_reference_benchmark.json`
 - `artifacts/human_reference_comparison.svg`
 
+## Real Timestamp Benchmark
+
+This repository also includes a real-world behavior benchmark built from the official Ubuntu IRC public logs.
+
+What it measures:
+
+- real human multi-party conversation history
+- minute-level public timestamps from the official log archive
+- delay until the same speaker naturally speaks again in the same approximate dialogue thread
+- suppress cases where that speaker does not speak again within the observation window
+
+Important:
+
+- this is not an optimal-policy benchmark
+- it is an external-distribution behavior benchmark
+- it is intentionally harder than the manual benchmark because the data is noisy, multi-party, and only weakly mapped into the current two-role model
+
+Run it with:
+
+```powershell
+python ubuntu_irc_behavior_benchmark.py
+```
+
+Current benchmark configuration:
+
+- source: official Ubuntu IRC logs for `2026-02-04`, `2026-02-05`, `2026-02-06`
+- channel: `#ubuntu`
+- observation window: `6h`
+- role mapping used for the current model: focal speaker -> `assistant`, all other visible participants -> `user`
+
+Latest benchmark snapshot:
+
+- total cases: `164`
+- follow-up cases: `113`
+- suppress cases: `51`
+- overall within-tolerance rate: `17.1%`
+- follow-up within-tolerance rate: `22.1%`
+- suppress agreement rate: `5.9%`
+- follow-up detection rate: `98.2%`
+- follow-up MAE: `1673.9s`
+- follow-up Spearman rank correlation: `0.066`
+
+Interpretation:
+
+- the current model is strongly over-eager on real IRC data
+- it tends to predict another follow-up quickly instead of learning when humans actually stop speaking in that thread
+- this benchmark is useful precisely because it exposes the distribution gap hidden by the synthetic training set
+
+### Real Human Behavior Comparison
+
+![Ubuntu IRC human behavior comparison](artifacts/ubuntu_irc_behavior_comparison.svg)
+
+Detailed outputs:
+
+- `artifacts/ubuntu_irc_behavior_benchmark.md`
+- `artifacts/ubuntu_irc_behavior_benchmark.json`
+- `artifacts/ubuntu_irc_behavior_comparison.svg`
+- `ubuntu_irc_behavior_benchmark.py`
+
 ## Existing Model Artifacts
 
 Main generated artifacts:
