@@ -1,159 +1,158 @@
 # Active Terminal Assistant
 
-这是一个本地运行的主动式对话助手，当前版本已经从 CLI 原型演进到 GUI 主界面。
+Active Terminal Assistant is a local Ollama chat CLI with a learned wait-policy model for proactive follow-up timing.
 
-核心特性：
+This repository contains:
 
-- 全本地运行，基于 Ollama
-- 双模型架构
-- 对话模型：`qwen3:14b`
-- 判定模型：`qwen3:1.7b`
-- `agere` 负责显式工作流调度
-- `ProactiveAgent` 负责主动唤醒与睡眠节奏
-- 默认 GUI 聊天界面，CLI 作为开发兜底保留
-- 支持多轮对话、主动补充发言、用户打断、开发者面板
+- `ollama_wait_cli.py`: minimal multi-turn CLI built on `ollama serve`
+- `wait_model.py`: lightweight wait-policy model, feature extraction, bundle loading, and prediction
+- `run_training.py`: synthetic data generation, training, benchmark, and artifact export
+- `main.ipynb`: notebook entry point for training and export
+- `artifacts/`: trained weights, benchmark metrics, benchmark report, and context showcase
+- `smoke_test_ollama_wait_cli.py`: end-to-end smoke test for CLI startup, chat, wait prediction, and process shutdown
 
-## 当前重点
+## What The Model Does
 
-这版项目的重点不再是“可观测 CLI”，而是：
+The prediction model solves this task:
 
-- 更自然的 GUI 聊天体验
-- 更短、更口语化的默认回复
-- 短延续窗口和长主动窗口两层节奏
-- 更轻量的判定模型职责
-- 保留必要护栏，但减少外部规则对交流内容的主导
+Given the current dialogue context after the assistant has already spoken, and assuming the user remains silent from now on, predict when the assistant should proactively speak again.
 
-## 目录结构
+The model does not use an LLM for this decision. It is a lightweight neural model trained on structured dialogue data with explicit time-awareness and suppression logic.
+
+## Current Stack
+
+- LLM runtime: Ollama
+- Chat model: `gemma4:e4b`
+- Wait-policy model: local PyTorch model bundle in `artifacts/wait_policy_bundle.pt`
+- CLI mode: multi-turn terminal chat
+- Thinking mode: disabled by default through Ollama `think: false`
+
+## Project Layout
 
 ```text
-app/
-  adapters/     # Ollama 对话/判定适配器
-  cli/          # CLI 调试入口和 slash command
-  config/       # 配置加载
-  gui/          # Tk GUI 主界面与显示模型
-  prompts/      # 提示词
-  services/     # 主动调度、规则护栏、上下文压缩
-  state/        # 会话状态
-  utils/        # 日志与文本工具
-  workflow/     # agere 工作流编排
-tests/
-  unit/
-  integration/
-  e2e/
-scripts/
-  run_gui.py
-  run_cli.py
-  prepare_runtime.py
-  check_ollama.py
+.
+├─ artifacts/
+│  ├─ benchmark_report.md
+│  ├─ context_showcase.md
+│  ├─ metrics.json
+│  ├─ prediction_preview.json
+│  ├─ wait_policy_bundle.pt
+│  └─ wait_policy_state.pt
+├─ main.ipynb
+├─ ollama_wait_cli.py
+├─ run_training.py
+├─ smoke_test_ollama_wait_cli.py
+└─ wait_model.py
 ```
 
-## 一键启动
+## Requirements
+
+- Windows PowerShell
+- Python 3.12
+- Ollama installed locally
+- `gemma4:e4b` already pulled in Ollama
+- NVIDIA GPU optional
+  - the wait-policy model will use CUDA automatically if PyTorch with CUDA is installed
+
+## Install
+
+Create and activate a virtual environment if needed:
 
 ```powershell
-cmd /c run_all.bat
+python -m venv .ashley
+.\.ashley\Scripts\Activate.ps1
 ```
 
-这会自动：
-
-1. 创建虚拟环境
-2. 安装依赖
-3. 准备 Ollama 运行时
-4. 检查本地模型
-5. 启动 GUI
-
-## 手动启动 GUI
+Install dependencies:
 
 ```powershell
-.venv\Scripts\python.exe -m pip install -e .[dev]
-.venv\Scripts\python.exe scripts\prepare_runtime.py
-.venv\Scripts\python.exe scripts\run_gui.py
+python -m pip install -r requirements.txt
 ```
 
-## CLI 调试入口
-
-如果你仍然想用旧的终端调试入口：
+For CUDA on Windows with NVIDIA GPU, install the matching PyTorch build. Example for CUDA 12.8:
 
 ```powershell
-.venv\Scripts\python.exe scripts\run_cli.py
+python -m pip install --upgrade --force-reinstall torch==2.11.0+cu128 --index-url https://download.pytorch.org/whl/cu128
 ```
 
-## GUI 功能
+## Run The CLI
 
-- 聊天主区
-- 多行输入框
-- Send / Cancel Output / Clear Chat
-- Proactive mode 开关
-- Debug mode 开关
-- Developer panel 折叠区
-- Poke / Speak Now / Reset
-- Transcript 导出
-
-## Slash Commands
-
-GUI 输入框和 CLI 都支持：
-
-- `/help`
-- `/quit`
-- `/clear`
-- `/status`
-- `/models`
-- `/proactive on`
-- `/proactive off`
-- `/debug on`
-- `/debug off`
-- `/history`
-- `/config`
-- `/reset`
-- `/poke`
-- `/speak-now`
-
-## 配置
-
-默认配置文件是 [`agent.toml`](/c:/Users/33835/Erika_project_v3/agent.toml)。
-
-现在主要可调项包括：
-
-- 模型名称与 Ollama 地址
-- GUI 窗口尺寸与轮询间隔
-- 主动模式开关
-- 短延续窗口 / 长主动窗口
-- 冷却时间
-- 重复抑制阈值
-- 日志级别
-
-## 测试
+Start the local chat CLI:
 
 ```powershell
-.venv\Scripts\python.exe -m pytest
+python ollama_wait_cli.py
 ```
 
-当前自动化覆盖：
+What it does:
 
-- 判定 JSON 解析
-- 规则护栏
-- GUI 状态显示模型
-- slash command 处理
-- 正常回复路径
-- 主动补充路径
-- 用户打断主动输出
-- 错误恢复
+- starts a dedicated `ollama serve` process on a local port
+- chats with `gemma4:e4b`
+- runs the wait-policy model after each assistant reply
+- prints the recommended proactive wait time if the user stays silent
+- kills the spawned Ollama process on exit
 
-## Ollama 依赖
-
-本地至少需要：
+Optional flags:
 
 ```powershell
-ollama pull qwen3:14b
-ollama pull qwen3:1.7b
+python ollama_wait_cli.py --device cuda
+python ollama_wait_cli.py --think
+python ollama_wait_cli.py --model gemma4:e4b
 ```
 
-单独检查运行时：
+Notes:
+
+- `--think` enables Ollama thinking mode. Default is off.
+- if you omit `--device`, the wait-policy model uses `cuda` when available, otherwise `cpu`
+
+## Train Or Rebuild The Model
+
+Run the training pipeline:
 
 ```powershell
-.venv\Scripts\python.exe scripts\check_ollama.py
+python run_training.py
 ```
 
-## 文档
+Or open and execute:
 
-- [项目参考](/c:/Users/33835/Erika_project_v3/docs/PROJECT_REFERENCE.md)
-- [测试与手动验证](/c:/Users/33835/Erika_project_v3/docs/TEST_PLAN.md)
+```text
+main.ipynb
+```
+
+Training outputs are written into `artifacts/`.
+
+## Benchmark Outputs
+
+Main benchmark artifacts:
+
+- `artifacts/metrics.json`
+- `artifacts/benchmark_report.md`
+- `artifacts/context_showcase.md`
+
+These files record:
+
+- acceptance metrics
+- practical-score style evaluation
+- stress and lexical checks
+- representative context-level prediction examples
+
+## Test
+
+Run the end-to-end smoke test:
+
+```powershell
+python smoke_test_ollama_wait_cli.py
+```
+
+The smoke test verifies:
+
+- Ollama server startup
+- one real chat roundtrip
+- wait-policy inference
+- clean process shutdown
+- port release after exit
+
+## Notes
+
+- The wait-policy benchmark is currently based mainly on synthetic data.
+- The benchmark is useful for iteration, but real annotated dialogue data would be a stronger validation set.
+- Model artifacts are included in this repository so the CLI can run directly without retraining.

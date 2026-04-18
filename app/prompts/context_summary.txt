@@ -1,2 +1,0 @@
-Summarize the recent conversation for a lightweight decision model.
-Focus on unresolved user intent, whether the assistant asked a question, and whether a follow-up would help.

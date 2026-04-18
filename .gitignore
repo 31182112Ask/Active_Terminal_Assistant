@@ -1,7 +1,6 @@
-.venv/
+.ashley/
 __pycache__/
 *.pyc
-.pytest_cache/
-logs/
-.mypy_cache/
-*.egg-info/
+*.pyo
+*.pyd
+.ipynb_checkpoints/

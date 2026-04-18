@@ -1,0 +1,126 @@
+[
+  {
+    "split": "test_iid",
+    "scenario": "clarification_needed",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Please finish the metrics review for me."
+      },
+      {
+        "role": "assistant",
+        "text": "I can, but I still need one missing detail. No rush, but I still need the missing detail."
+      },
+      {
+        "role": "assistant",
+        "text": "Which dataset or source of truth should I use?"
+      },
+      {
+        "role": "assistant",
+        "text": "If you go quiet, I'll check back in 585 seconds so we don't stay blocked."
+      }
+    ],
+    "target": "585s (10m)",
+    "predicted": "585s (10m)"
+  },
+  {
+    "split": "test_lexical",
+    "scenario": "support_followup",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I'm still stuck on this sign-in problem."
+      },
+      {
+        "role": "assistant",
+        "text": "Please try the two steps I just outlined and send me the result."
+      },
+      {
+        "role": "user",
+        "text": "Will do."
+      },
+      {
+        "role": "assistant",
+        "text": "If it stays broken, I'll follow up 332 seconds from now so this doesn't stall."
+      }
+    ],
+    "target": "332s (6m)",
+    "predicted": "332s (6m)"
+  },
+  {
+    "split": "test_stress",
+    "scenario": "accountability_checkin",
+    "turns": [
+      {
+        "role": "user",
+        "text": "I'm trying to finish the outreach list."
+      },
+      {
+        "role": "assistant",
+        "text": "Okay, what kind of check-in would help?"
+      },
+      {
+        "role": "user",
+        "text": "If I haven't done the outreach list by in 3457 seconds, please follow up."
+      },
+      {
+        "role": "assistant",
+        "text": "Will do. I'll check back around in 3457 seconds if I still haven't heard that it's done."
+      }
+    ],
+    "target": "3457s (58m)",
+    "predicted": "3457s (58m)"
+  },
+  {
+    "split": "showcase",
+    "scenario": "showcase_scheduled_morning",
+    "turns": [
+      {
+        "role": "user",
+        "text": "If I still have not sent the deck by tomorrow morning, follow up."
+      },
+      {
+        "role": "assistant",
+        "text": "Understood. I will check back tomorrow morning if it is still missing."
+      }
+    ],
+    "target": "54000s (15.0h)",
+    "predicted": "54000s (15.0h)"
+  },
+  {
+    "split": "showcase",
+    "scenario": "showcase_urgent_incident",
+    "turns": [
+      {
+        "role": "user",
+        "text": "Prod is still down after the restart."
+      },
+      {
+        "role": "assistant",
+        "text": "Keep checking the worker logs and the failing job queue."
+      },
+      {
+        "role": "assistant",
+        "text": "If I do not hear back, I will check in again in 37 seconds."
+      }
+    ],
+    "target": "37s (37s)",
+    "predicted": "37s (37s)"
+  },
+  {
+    "split": "showcase",
+    "scenario": "showcase_do_not_disturb",
+    "turns": [
+      {
+        "role": "user",
+        "text": "我接下来一直开会，今晚别再找我。"
+      },
+      {
+        "role": "assistant",
+        "text": "明白，我先停在这里，等你之后再回来。"
+      }
+    ],
+    "target": "suppress",
+    "predicted": "suppress"
+  }
+]
